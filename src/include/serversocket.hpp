@@ -36,13 +36,13 @@ public:
 private:
 	void run();
 
+	void initialize();
+
 protected:
 	string host;
 	int port;
 
 	int socketId;
-
-	static void initialize(serversocket* servSocket);
 };
 
 #endif /* SOCKET_SERVERSOCKET_HPP_ */

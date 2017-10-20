@@ -8,13 +8,30 @@
 #include "../include/serversocket.hpp"
 #include "../include/logger.hpp"
 
-void serversocket::run()
+serversocket::serversocket(string host, int port)
 {
-	thread serverThread(initialize, (serversocket*)this);
-	serverThread.join();
+	this->host = host;
+	this->port = port;
+
+	this->run();
 }
 
-void serversocket::initialize(serversocket* servSocket)
+serversocket::serversocket(int port) : serversocket("127.0.0.1", port)
+{
+
+}
+
+serversocket::~serversocket()
+{
+
+}
+
+void serversocket::run()
+{
+	initialize();
+}
+
+void serversocket::initialize()
 {
 	int serverSocketId;
 
@@ -32,7 +49,7 @@ void serversocket::initialize(serversocket* servSocket)
 	serv_addr.sin_family = AF_INET;
 
 	//Server Address Port
-	serv_addr.sin_port = htons(servSocket->port);
+	serv_addr.sin_port = htons(this->port);
 
 	//Server Address
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -44,7 +61,7 @@ void serversocket::initialize(serversocket* servSocket)
 
 	listen(serverSocketId, serversocket::DEFAULT_CONNECTIONS_MAX);
 
-	servSocket->socketId = serverSocketId;
+	this->socketId = serverSocketId;
 }
 
 clientsocket serversocket::acceptClient()
