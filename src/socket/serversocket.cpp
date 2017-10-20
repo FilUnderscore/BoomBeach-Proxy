@@ -8,6 +8,11 @@
 #include "../include/serversocket.hpp"
 #include "../include/logger.hpp"
 
+serversocket::serversocket()
+{
+
+}
+
 serversocket::serversocket(string host, int port)
 {
 	this->socketId = -1;

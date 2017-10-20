@@ -12,6 +12,7 @@
 #include "serversocket.hpp"
 
 #include <vector>
+#include <thread>
 
 using namespace std;
 
@@ -24,13 +25,18 @@ public:
 	void start();
 
 	void connection(clientsocket socket);
-	void disconnect(client client);
+
+	void disconnect(client cli);
 
 	void stop();
 
 protected:
 	vector<client> clients;
 	serversocket serverSocket;
+
+	static void thread(network instance, serversocket servsock);
+
+	bool running;
 };
 
 #endif /* PROXY_NETWORK_NETWORK_HPP_ */

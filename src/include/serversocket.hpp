@@ -29,6 +29,7 @@ class serversocket
 public:
 	static const int DEFAULT_CONNECTIONS_MAX = 100;
 
+	serversocket();
 	serversocket(string host, int port);
 	serversocket(int port);
 	~serversocket();

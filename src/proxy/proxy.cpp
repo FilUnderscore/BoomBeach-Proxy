@@ -6,8 +6,6 @@
  */
 
 #include "../include/proxy.hpp"
-#include "../include/network.hpp"
-#include "../include/logger.hpp"
 
 const string proxy::DEFAULT_HOST = "game.boombeachgame.com"; //22 chars long.
 
@@ -19,11 +17,8 @@ proxy::proxy(string host, int port)
 	this->host = host;
 	this->port = port;
 
-	serversocket socket("127.0.0.1", port);
-
-	clientsocket sock = socket.acceptClient();
-
-	logger::log("Connection.");
+	this->net = *new network();
+	this->net.start();
 }
 
 void proxy::init(string host, int port)

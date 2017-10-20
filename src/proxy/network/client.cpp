@@ -7,7 +7,11 @@
 
 #include "../../include/client.hpp"
 #include "../../include/proxy.hpp"
-#include "../../include/clientsocket.hpp"
+
+client::client()
+{
+
+}
 
 client::client(clientsocket socket)
 {

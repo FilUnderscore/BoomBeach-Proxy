@@ -11,6 +11,10 @@
 #include <iostream>
 #include <string>
 
+#include "network.hpp"
+
+#include "logger.hpp"
+
 using namespace std;
 
 /*
@@ -33,9 +37,13 @@ public:
 
 	static proxy* getProxy();
 
+	network getNetwork();
+
 protected:
 	string host;
 	int port;
+
+	network net;
 
 private:
 	static proxy* instance;

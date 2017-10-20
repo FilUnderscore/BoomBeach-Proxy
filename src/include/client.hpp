@@ -16,6 +16,8 @@ public:
 	client(clientsocket socket);
 	~client();
 
+	client();
+
 protected:
 	/**
 	 * Client/Device connection
