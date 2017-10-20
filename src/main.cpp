@@ -5,7 +5,7 @@
  *      Author: Filip Jerkovic
  */
 
-#include "proxy.hpp"
+#include "include/proxy.hpp"
 
 /*
  * argc - argument count
@@ -14,7 +14,7 @@
 int main(int argc, char** argv)
 {
 	//Starts the proxy with the default Supercell Game Server Port
-	proxy proxy(proxy::DEFAULT_PORT);
+	proxy::init(proxy::DEFAULT_HOST, proxy::DEFAULT_PORT);
 
 	return 0;
 }

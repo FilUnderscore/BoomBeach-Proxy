@@ -5,11 +5,17 @@
  *      Author: Filip Jerkovic
  */
 
-#include "client.hpp"
-#include "proxy.hpp"
+#include "../../include/client.hpp"
+#include "../../include/proxy.hpp"
+#include "../../include/clientsocket.hpp"
 
 client::client(clientsocket socket)
 {
 	this->socket = socket;
-	this->gameSocket = clientsocket(proxy::getProxy().host, proxy::getProxy().port);
+	clientsocket gamesocket(proxy::getProxy()->getHost(), proxy::getProxy()->getPort());
+}
+
+client::~client()
+{
+
 }

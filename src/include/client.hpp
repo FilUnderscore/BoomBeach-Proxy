@@ -14,6 +14,7 @@ class client
 {
 public:
 	client(clientsocket socket);
+	~client();
 
 protected:
 	/**

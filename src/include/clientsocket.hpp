@@ -15,7 +15,10 @@ using namespace std;
 class clientsocket
 {
 public:
+	clientsocket();
+
 	clientsocket(string host, int port);
+	~clientsocket();
 };
 
 #endif /* SOCKET_CLIENTSOCKET_HPP_ */

@@ -13,17 +13,17 @@
 
 using namespace std;
 
+/*
+ * SINGLETON
+ */
 class proxy
 {
 public:
-	static const int DEFAULT_HOST = "game.boombeachgame.com"; //22 chars long.
+	static const string DEFAULT_HOST;
 	static const int DEFAULT_PORT = 9339; //Same in every supercell game.
 
-	proxy(string host, int port);
-
-	proxy(int port);
-
-	void init();
+	static void init(int port);
+	static void init(string host, int port);
 
 	void stop();
 
@@ -31,11 +31,16 @@ public:
 
 	int getPort();
 
-	static proxy getProxy();
+	static proxy* getProxy();
 
 protected:
 	string host;
 	int port;
+
+private:
+	static proxy* instance;
+
+	proxy(string host, int port);
 };
 
 #endif /* PROXY_PROXY_HPP_ */
