@@ -10,29 +10,25 @@
 
 serversocket::serversocket(string host, int port)
 {
+	this->socketId = -1;
+
 	this->host = host;
 	this->port = port;
 
-	this->run();
+	this->initialize();
 }
 
 serversocket::serversocket(int port) : serversocket("127.0.0.1", port)
-{
-
-}
+{}
 
 serversocket::~serversocket()
 {
-
-}
-
-void serversocket::run()
-{
-	initialize();
+	//TODO: Deinitialize
 }
 
 void serversocket::initialize()
 {
+#ifndef __WIN32__
 	int serverSocketId;
 
 	struct sockaddr_in serv_addr;
@@ -62,10 +58,14 @@ void serversocket::initialize()
 	listen(serverSocketId, serversocket::DEFAULT_CONNECTIONS_MAX);
 
 	this->socketId = serverSocketId;
+#else
+//TODO: Implement Winsock2
+#endif
 }
 
 clientsocket serversocket::acceptClient()
 {
+#ifndef __WIN32__
 	struct sockaddr_in cli_addr;
 	unsigned int clientAddrLen = sizeof(cli_addr);
 
@@ -74,8 +74,10 @@ clientsocket serversocket::acceptClient()
 	if(clientSocketId < 0)
 		logger::log("Failed when attempting to connect clientsocket.");
 
-	//TODO: Initialize clientsocket.
 	return clientsocket(clientSocketId);
+#else
+//TODO: Implement Winsock2
+#endif
 }
 
 int serversocket::getSocketId()

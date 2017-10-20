@@ -9,6 +9,17 @@
 #define SOCKET_CLIENTSOCKET_HPP_
 
 #include <string>
+#include <strings.h>
+
+#ifndef __WIN32__
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#else
+//TODO: Implement Winsock2
+#endif
 
 using namespace std;
 
@@ -20,6 +31,8 @@ public:
 
 	clientsocket(string host, int port);
 	~clientsocket();
+
+	void connectTo(char* host, int port);
 
 	int getSocketId();
 

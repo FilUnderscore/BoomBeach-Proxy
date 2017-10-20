@@ -11,12 +11,16 @@
 #include <iostream>
 #include <string>
 
-#include <thread>
+#include "clientsocket.hpp"
+
+#ifndef __WIN32__
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
-#include "clientsocket.hpp"
+#include <netdb.h>
+#else
+//Implement Winsock2
+#endif
 
 using namespace std;
 
@@ -34,8 +38,6 @@ public:
 	int getSocketId();
 
 private:
-	void run();
-
 	void initialize();
 
 protected:

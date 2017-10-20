@@ -19,7 +19,7 @@ proxy::proxy(string host, int port)
 	this->host = host;
 	this->port = port;
 
-	serversocket socket(host, port);
+	serversocket socket("127.0.0.1", port);
 
 	clientsocket sock = socket.acceptClient();
 
