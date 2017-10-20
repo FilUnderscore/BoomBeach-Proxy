@@ -27,7 +27,7 @@ void proxy::init(string host, int port)
 	}
 	else
 	{
-		throw "";
+		throw "Proxy has already been initialized!";
 	}
 }
 

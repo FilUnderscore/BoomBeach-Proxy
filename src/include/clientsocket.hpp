@@ -16,9 +16,15 @@ class clientsocket
 {
 public:
 	clientsocket();
+	clientsocket(int socketId);
 
 	clientsocket(string host, int port);
 	~clientsocket();
+
+	int getSocketId();
+
+protected:
+	int socketId;
 };
 
 #endif /* SOCKET_CLIENTSOCKET_HPP_ */

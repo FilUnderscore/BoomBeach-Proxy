@@ -12,6 +12,11 @@ clientsocket::clientsocket()
 
 }
 
+clientsocket::clientsocket(int socketId)
+{
+
+}
+
 clientsocket::clientsocket(string host, int port)
 {
 
