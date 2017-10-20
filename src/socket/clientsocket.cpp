@@ -15,12 +15,12 @@ clientsocket::clientsocket()
 
 clientsocket::clientsocket(int socketId)
 {
-
+	this->socketId = socketId;
 }
 
 clientsocket::clientsocket(string host, int port)
 {
-
+	this->connectTo((char*)&host, port);
 }
 
 clientsocket::~clientsocket()

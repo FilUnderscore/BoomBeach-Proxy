@@ -35,7 +35,11 @@ public:
 
 	int getPort();
 
-	static proxy* getProxy();
+	static proxy& getProxy()
+	{
+		static proxy instance;
+		return instance;
+	}
 
 	network getNetwork();
 
@@ -48,7 +52,10 @@ protected:
 private:
 	static proxy* instance;
 
-	proxy(string host, int port);
+	proxy();
+	proxy(const proxy&);
+	proxy& operator=(const proxy&);
+	~proxy();
 };
 
 #endif /* PROXY_PROXY_HPP_ */

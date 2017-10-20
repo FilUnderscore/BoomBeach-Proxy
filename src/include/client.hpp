@@ -9,6 +9,9 @@
 #define PROXY_NETWORK_CLIENT_HPP_
 
 #include "clientsocket.hpp"
+#include <thread>
+
+using namespace std;
 
 class client
 {
@@ -28,6 +31,10 @@ protected:
 	 * Game Server Socket - connects to Boom Beach server.
 	 */
 	clientsocket gameSocket;
+
+	thread* clientThread;
+
+	static void init(client instance);
 };
 
 #endif /* PROXY_NETWORK_CLIENT_HPP_ */

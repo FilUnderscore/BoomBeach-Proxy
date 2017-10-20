@@ -38,6 +38,9 @@ public:
 
 	int getSocketId();
 
+	string getHost();
+	int getPort();
+
 private:
 	void initialize();
 

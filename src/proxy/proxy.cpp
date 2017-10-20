@@ -9,24 +9,25 @@
 
 const string proxy::DEFAULT_HOST = "game.boombeachgame.com"; //22 chars long.
 
-proxy* proxy::instance = NULL;
+proxy* proxy::instance;
 
-proxy::proxy(string host, int port)
+proxy::proxy()
 {
-	//TODO: Change host var.
-	this->host = host;
-	this->port = port;
 
-	this->net = *new network();
-	this->net.start();
+}
+
+proxy::~proxy()
+{
+
 }
 
 void proxy::init(string host, int port)
 {
-	if(instance == NULL)
-	{
-		instance = new proxy(host, port);
-	}
+	proxy::getProxy().host = host;
+	proxy::getProxy().port = port;
+
+	proxy::getProxy().net = *new network();
+	proxy::getProxy().net.start();
 }
 
 void proxy::stop()
@@ -36,15 +37,10 @@ void proxy::stop()
 
 string proxy::getHost()
 {
-	return NULL;
+	return this->host;
 }
 
 int proxy::getPort()
 {
 	return this->port;
-}
-
-proxy* proxy::getProxy()
-{
-	return instance;
 }

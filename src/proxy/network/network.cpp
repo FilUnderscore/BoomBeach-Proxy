@@ -7,6 +7,7 @@
 
 #include "../../include/network.hpp"
 #include "../../include/logger.hpp"
+#include "../../include/proxy.hpp"
 
 network::network()
 {
@@ -28,6 +29,8 @@ void network::start()
 
 void network::thread(network instance, serversocket servsock)
 {
+	logger::log("Proxy running. Connect via " + servsock.getHost() + ":" + to_string(proxy::getProxy().getPort()));
+
 	instance.running = true;
 
 	while(instance.running)

@@ -64,12 +64,16 @@ void serversocket::initialize()
 
 	this->socketId = serverSocketId;
 #else
-//TODO: Implement Winsock2
+	//TODO: Implement Winsock2
+	throw "Windows support not implemented!";
 #endif
 }
 
 clientsocket serversocket::acceptClient()
 {
+	if(this->socketId < 0)
+		throw "Serversocket is not listening!";
+
 #ifndef __WIN32__
 	struct sockaddr_in cli_addr;
 	unsigned int clientAddrLen = sizeof(cli_addr);
@@ -81,11 +85,22 @@ clientsocket serversocket::acceptClient()
 
 	return clientsocket(clientSocketId);
 #else
-//TODO: Implement Winsock2
+	//TODO: Implement Winsock2
+	throw "Windows support not implemented!";
 #endif
 }
 
 int serversocket::getSocketId()
 {
 	return this->socketId;
+}
+
+string serversocket::getHost()
+{
+	return this->host;
+}
+
+int serversocket::getPort()
+{
+	return this->port;
 }
