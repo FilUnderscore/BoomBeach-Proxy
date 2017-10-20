@@ -12,7 +12,7 @@
 client::client(clientsocket socket)
 {
 	this->socket = socket;
-	clientsocket gamesocket(proxy::getProxy()->getHost(), proxy::getProxy()->getPort());
+	this->gameSocket = *new clientsocket(proxy::getProxy()->getHost(), proxy::getProxy()->getPort());
 }
 
 client::~client()
