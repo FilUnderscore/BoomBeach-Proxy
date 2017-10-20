@@ -42,8 +42,7 @@ void serversocket::initialize()
 
 	if(serverSocketId < 0)
 	{
-		logger::log("Failed to create socket.");
-		return;
+		throw std::runtime_error("Failed to create socket.");
 	}
 
 	//Should always be AF_INET
@@ -57,7 +56,7 @@ void serversocket::initialize()
 
 	if(bind(serverSocketId, (struct sockaddr*) &serv_addr, sizeof(serv_addr)))
 	{
-		logger::log("Failed to bind to server address/port.");
+		throw std::runtime_error("Failed to bind to server address/port.");
 	}
 
 	listen(serverSocketId, serversocket::DEFAULT_CONNECTIONS_MAX);
@@ -72,7 +71,7 @@ void serversocket::initialize()
 clientsocket serversocket::acceptClient()
 {
 	if(this->socketId < 0)
-		throw "Serversocket is not listening!";
+		throw std::runtime_error("Serversocket is not listening!");
 
 #ifndef __WIN32__
 	struct sockaddr_in cli_addr;
@@ -81,12 +80,12 @@ clientsocket serversocket::acceptClient()
 	int clientSocketId = accept(socketId, (struct sockaddr*) &cli_addr, &clientAddrLen);
 
 	if(clientSocketId < 0)
-		logger::log("Failed when attempting to connect clientsocket.");
+		throw std::runtime_error("Failed when attempting to connect clientsocket.");
 
 	return clientsocket(clientSocketId);
 #else
 	//TODO: Implement Winsock2
-	throw "Windows support not implemented!";
+	throw std::runtime_error("Windows support not implemented!");
 #endif
 }
 

@@ -34,23 +34,17 @@ void clientsocket::connectTo(char* host, int port)
 
 	struct sockaddr_in serv_addr;
 
-	//Host computer
-	struct hostent *server;
-
 	clientSocketId = socket(AF_INET, SOCK_STREAM, 0);
 
 	if(clientSocketId < 0)
 	{
-		logger::log("Failed to open clientsocket.");
-		return;
+		throw std::runtime_error("Failed to open clientsocket.");
 	}
-
-	server = gethostbyname(host);
 
 	//AF_INET for IPv4 support.
 	serv_addr.sin_family = AF_INET;
 
-	bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
+	inet_pton(AF_INET, host, &serv_addr.sin_addr);
 
 	serv_addr.sin_port = htons(port);
 
@@ -58,8 +52,7 @@ void clientsocket::connectTo(char* host, int port)
 
 	if(connect(clientSocketId, (struct sockaddr*) &serv_addr, servAddrLen) < 0)
 	{
-		logger::log("Failed to connect to host.");
-		return;
+		throw std::runtime_error("Failed to connect to host.");
 	}
 
 	this->socketId = clientSocketId;

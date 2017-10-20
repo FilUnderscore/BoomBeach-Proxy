@@ -10,8 +10,8 @@
 
 client::client()
 {
-	thread t(init, *this);
-	t.join();
+	this->clientThread = new thread(init, *this);
+	this->clientThread->detach();
 }
 
 client::client(clientsocket socket) : client()

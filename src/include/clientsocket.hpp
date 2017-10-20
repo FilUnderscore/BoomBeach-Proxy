@@ -11,6 +11,8 @@
 #include <string>
 #include <strings.h>
 
+#include <arpa/inet.h>
+
 #ifndef __WIN32__
 #include <stdio.h>
 #include <sys/types.h>
