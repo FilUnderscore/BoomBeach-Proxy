@@ -29,3 +29,13 @@ void client::init(client client)
 {
 
 }
+
+clientsocket client::getSocket()
+{
+	return this->socket;
+}
+
+clientsocket client::getGameSocket()
+{
+	return this->gameSocket;
+}

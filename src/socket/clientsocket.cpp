@@ -20,7 +20,7 @@ clientsocket::clientsocket(int socketId)
 
 clientsocket::clientsocket(string host, int port)
 {
-	this->connectTo((char*)&host, port);
+	this->connectTo(host, port);
 }
 
 clientsocket::~clientsocket()
@@ -28,7 +28,7 @@ clientsocket::~clientsocket()
 
 }
 
-void clientsocket::connectTo(char* host, int port)
+void clientsocket::connectTo(string host, int port)
 {
 	int clientSocketId;
 
@@ -44,13 +44,13 @@ void clientsocket::connectTo(char* host, int port)
 	//AF_INET for IPv4 support.
 	serv_addr.sin_family = AF_INET;
 
-	inet_pton(AF_INET, host, &serv_addr.sin_addr);
+	logger::log("Host: " + std::string(host) + " | Port: " + to_string(port));
+
+	inet_pton(AF_INET, host.c_str(), &serv_addr.sin_addr);
 
 	serv_addr.sin_port = htons(port);
 
-	unsigned int servAddrLen = sizeof(serv_addr);
-
-	if(connect(clientSocketId, (struct sockaddr*) &serv_addr, servAddrLen) < 0)
+	if(connect(clientSocketId, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
 	{
 		throw std::runtime_error("Failed to connect to host.");
 	}
@@ -61,4 +61,24 @@ void clientsocket::connectTo(char* host, int port)
 int clientsocket::getSocketId()
 {
 	return this->socketId;
+}
+
+void clientsocket::write(void* data)
+{
+	this->write(data, 0, sizeof(data));
+}
+
+void clientsocket::write(void* data, int offset, int length)
+{
+	pwrite(this->socketId, data, length, offset);
+}
+
+void clientsocket::read(void* data)
+{
+	this->read(data, 0, sizeof(data));
+}
+
+void clientsocket::read(void* array, int offset, int length)
+{
+	pread(this->socketId, array, length, offset);
 }

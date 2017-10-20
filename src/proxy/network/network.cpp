@@ -33,9 +33,22 @@ void network::start()
 	{
 		clientsocket clisock = servsock.acceptClient();
 
+		logger::log("C");
+
 		client cli(clisock);
 
+		logger::log("D");
+
 		this->clients.push_back(cli);
+
+		logger::log("E");
+
+		//void* arr = malloc(100);
+
+		//cli.getSocket().read(arr);
+
+		//logger::log("L: " + sizeof(arr));
+
 		logger::log("new client");
 	}
 }

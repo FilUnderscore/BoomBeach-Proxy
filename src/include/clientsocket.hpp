@@ -13,6 +13,8 @@
 
 #include <arpa/inet.h>
 
+#include <unistd.h>
+
 #ifndef __WIN32__
 #include <stdio.h>
 #include <sys/types.h>
@@ -34,7 +36,13 @@ public:
 	clientsocket(string host, int port);
 	~clientsocket();
 
-	void connectTo(char* host, int port);
+	void connectTo(string host, int port);
+
+	void write(void* data);
+	void write(void* data, int offset, int length);
+
+	void read(void* array);
+	void read(void* array, int offset, int length);
 
 	int getSocketId();
 

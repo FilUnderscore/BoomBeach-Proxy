@@ -21,6 +21,9 @@ public:
 
 	client();
 
+	clientsocket getSocket();
+	clientsocket getGameSocket();
+
 protected:
 	/**
 	 * Client/Device connection
