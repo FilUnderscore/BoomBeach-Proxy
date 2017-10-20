@@ -1,2 +1,2 @@
 # BoomBeach-Proxy
-A C++ written proxy for Boom Beach.
+A Boom Beach Proxy written in C++, compatible with Windows/macOS/Linux.

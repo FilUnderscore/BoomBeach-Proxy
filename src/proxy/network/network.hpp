@@ -8,8 +8,12 @@
 #ifndef PROXY_NETWORK_NETWORK_HPP_
 #define PROXY_NETWORK_NETWORK_HPP_
 
-#include "clientsocket.hpp"
+#include "client.hpp"
 #include "serversocket.hpp"
+
+#include <vector>
+
+using namespace std;
 
 class network
 {
@@ -20,6 +24,13 @@ public:
 	void start();
 
 	void connection(clientsocket socket);
+	void disconnect(client client);
+
+	void stop();
+
+protected:
+	vector<client> clients;
+	serversocket serverSocket;
 };
 
 #endif /* PROXY_NETWORK_NETWORK_HPP_ */
