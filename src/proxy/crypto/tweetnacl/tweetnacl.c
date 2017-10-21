@@ -10,6 +10,13 @@
  */
 
 #include "tweetnacl.h"
+
+#ifdef __WIN32__
+#include "Windows.h"
+#endif
+#include <stdio.h>
+#include <stdlib.h>
+
 #define FOR(i,n) for (i = 0;i < n;++i)
 #define sv static void
 
@@ -19,9 +26,48 @@ typedef unsigned long long u64;
 typedef long long i64;
 typedef i64 gf[16];
 
-void randombytes(u8 * x,u64 y)
+void randombytes(u8 * ptr, u64 length)
 {
 	//TODO: Implement from sodium
+	char failed = 0;
+
+#ifdef __WIN32__
+	static HCRYPTPROV prov = 0;
+	if(prov == 0)
+	{
+		if(!CryptAcquireContext(&prov, NULL, NULL, PROV_RSA_FULL, 0))
+		{
+			failed = 1;
+		}
+	}
+
+	if(!failed && !CryptGenRandom(prov, length, ptr))
+	{
+		failed = 1;
+	}
+#else
+	FILE* fh = fopen("/dev/urandom", "rb");
+
+	if(fh != NULL)
+	{
+		if(fread(ptr, length, 1, fh) == 0)
+		{
+			failed = 1;
+		}
+
+		fclose(fh);
+	}
+	else
+	{
+		failed = 1;
+	}
+#endif
+
+	if(failed)
+	{
+		fprintf(stderr, "Failed randombytes");
+		return;
+	}
 }
 
 static const u8

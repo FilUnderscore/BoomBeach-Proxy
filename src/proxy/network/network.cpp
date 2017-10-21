@@ -20,7 +20,19 @@ network::~network()
 	//TODO: Deinitialize
 	this->running = false;
 
+	clear();
+
 	this->clients.~vector();
+}
+
+void network::clear()
+{
+	for(int index = 0; index < this->clients.size(); index++)
+	{
+		this->clients.at(index).~client();
+	}
+
+	this->clients.clear();
 }
 
 void network::start()

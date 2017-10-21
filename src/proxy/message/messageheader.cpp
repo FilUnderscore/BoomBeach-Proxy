@@ -21,7 +21,6 @@ messageheader::messageheader(short messageId, int payloadLen, short messageVersi
 
 messageheader::~messageheader()
 {
-
 }
 
 short messageheader::getId()

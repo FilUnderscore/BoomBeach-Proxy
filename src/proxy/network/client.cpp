@@ -26,7 +26,12 @@ client::client(clientsocket socket) : client()
 
 client::~client()
 {
+	this->socket.~clientsocket();
+	this->gameSocket.~clientsocket();
 
+	//TODO: Deconstructors called during thread execution?
+	//this->clientRequestThread->~thread();
+	//this->clientResponseThread->~thread();
 }
 
 void client::runRequest(client instance)
@@ -78,7 +83,12 @@ void client::runRequest(client instance)
 				int messageLength = messageheader::HEADER_LENGTH + clientHeader.getPayloadLength();
 				unsigned char message[messageLength];
 
-				memcpy(message, clientHeader.array(), messageheader::HEADER_LENGTH);
+				unsigned char* headerArray = clientHeader.array();
+
+				memcpy(message, headerArray, messageheader::HEADER_LENGTH);
+
+				free(headerArray);
+
 				memcpy(message + 7, clientData, clientHeader.getPayloadLength());
 
 				logger::log("[CLIENT] Payload: " + byte::toHexString(message, messageLength));
@@ -137,8 +147,13 @@ void client::runResponse(client instance)
 				int messageLength = messageheader::HEADER_LENGTH + serverHeader.getPayloadLength();
 				unsigned char message[messageLength];
 
-				memcpy(message, serverHeader.array(), messageheader::HEADER_LENGTH);
-			    memcpy(message + 7, serverData, serverHeader.getPayloadLength());
+				unsigned char* headerArray = serverHeader.array();
+
+				memcpy(message, headerArray, messageheader::HEADER_LENGTH);
+
+				free(headerArray);
+
+				memcpy(message + 7, serverData, serverHeader.getPayloadLength());
 
 				logger::log("[SERVER] Payload: " + byte::toHexString(message, messageLength));
 				logger::log("");

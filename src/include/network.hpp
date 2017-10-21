@@ -35,6 +35,9 @@ protected:
 	serversocket serverSocket;
 
 	bool running;
+
+private:
+	void clear();
 };
 
 #endif /* PROXY_NETWORK_NETWORK_HPP_ */

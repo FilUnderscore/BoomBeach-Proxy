@@ -14,6 +14,7 @@ class message
 {
 public:
 	message(messageheader header);
+	~message();
 
 	messageheader getHeader();
 
