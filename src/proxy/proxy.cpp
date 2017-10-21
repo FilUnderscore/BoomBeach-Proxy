@@ -26,6 +26,8 @@ void proxy::init(string host, int port)
 	proxy::getProxy().host = host;
 	proxy::getProxy().port = port;
 
+	proxy::getProxy().con = *new console();
+
 	proxy::getProxy().net = *new network();
 	proxy::getProxy().net.start();
 }

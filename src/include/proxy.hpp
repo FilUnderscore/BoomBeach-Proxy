@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 
+#include "console.hpp"
 #include "network.hpp"
 
 #include "logger.hpp"
@@ -47,6 +48,7 @@ protected:
 	string host;
 	int port;
 
+	console con;
 	network net;
 
 private:
