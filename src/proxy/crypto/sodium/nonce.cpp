@@ -6,7 +6,7 @@
  */
 
 #include <cstdlib>
-#include <string>
+#include <cstring>
 #include <stdexcept>
 
 #include "../../../include/nonce.hpp"
@@ -49,7 +49,17 @@ nonce::nonce(unsigned char* clientKey, int client_key_len, unsigned char* server
 
 void nonce::increment()
 {
+	unsigned char buffer[byte::INT16_LENGTH];
+	memcpy(buffer, this->bytes, byte::INT16_LENGTH);
 
+	short s = byte::toInt16(buffer);
+
+	s += 2;
+
+	unsigned char* shortBuffer = byte::fromInt16(s);
+
+	this->bytes[0] = shortBuffer[0];
+	this->bytes[1] = shortBuffer[1];
 }
 
 unsigned char* nonce::getBytes()

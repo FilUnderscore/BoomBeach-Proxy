@@ -8,9 +8,8 @@
 #ifndef INCLUDE_NONCE_HPP_
 #define INCLUDE_NONCE_HPP_
 
-/**
- * cant be named nonce otherwise interferes with c++ libraries.
- */
+#include "byte.hpp"
+
 class nonce
 {
 private:
