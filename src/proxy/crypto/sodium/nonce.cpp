@@ -60,6 +60,8 @@ void nonce::increment()
 
 	this->bytes[0] = shortBuffer[0];
 	this->bytes[1] = shortBuffer[1];
+
+	free(shortBuffer);
 }
 
 unsigned char* nonce::getBytes()
