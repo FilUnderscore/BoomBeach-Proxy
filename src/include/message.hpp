@@ -8,19 +8,25 @@
 #ifndef PROXY_MESSAGE_MESSAGE_HPP_
 #define PROXY_MESSAGE_MESSAGE_HPP_
 
+#include "messageheader.hpp"
+
 class message
 {
 public:
-	message(short messageID, int payloadLen, short messageVersion, char* payload);
+	message(messageheader header);
+
+	messageheader getHeader();
 
 	void setEncryptedPayload(char* encrypted);
 
 	void setDecryptedPayload(char* decrypted);
 
+	char* getEncryptedPayload();
+
+	char* getDecryptedPayload();
+
 protected:
-	short messageID;
-	int payloadLen;
-	short messageVersion;
+	messageheader header;
 
 	char* encryptedPayload;
 	char* decryptedPayload;

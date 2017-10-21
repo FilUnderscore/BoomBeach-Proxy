@@ -16,6 +16,9 @@ using namespace std;
 class client
 {
 public:
+	//8 KiB
+	static const int READ_BYTES = 8192;
+
 	client(clientsocket socket);
 	~client();
 
@@ -35,9 +38,11 @@ protected:
 	 */
 	clientsocket gameSocket;
 
-	thread* clientThread;
+	thread* clientRequestThread;
+	thread* clientResponseThread;
 
-	static void run(client instance);
+	static void runRequest(client instance);
+	static void runResponse(client instance);
 };
 
 #endif /* PROXY_NETWORK_CLIENT_HPP_ */

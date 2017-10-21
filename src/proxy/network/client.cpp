@@ -8,6 +8,8 @@
 #include "../../include/client.hpp"
 #include "../../include/proxy.hpp"
 
+#include "../../include/messageheader.hpp"
+
 client::client() {}
 
 client::client(clientsocket socket) : client()
@@ -15,8 +17,11 @@ client::client(clientsocket socket) : client()
 	this->socket = socket;
 	this->gameSocket = *new clientsocket(proxy::getProxy().getHost(), proxy::getProxy().getPort());
 
-	this->clientThread = new thread(run, *this);
-	this->clientThread->detach();
+	this->clientRequestThread = new thread(runRequest, *this);
+	this->clientRequestThread->detach();
+
+	this->clientResponseThread = new thread(runResponse, *this);
+	this->clientResponseThread->detach();
 }
 
 client::~client()
@@ -24,56 +29,122 @@ client::~client()
 
 }
 
-void client::run(client instance)
+void client::runRequest(client instance)
 {
-	unsigned char clientData[4096];
-	unsigned char serverData[4096];
+	logger::log("Starting client request thread.");
+
+	unsigned char clientData[READ_BYTES];
 
 	int clientAvailable = 0;
-	int serverAvailable = 0;
+
+	bool clientHeaderSet = false;
+	messageheader clientHeader;
 
 	while(true)
 	{
 		//Client - Receive
 
 		clientAvailable = instance.getSocket().available();
-		serverAvailable = instance.getGameSocket().available();
 
-		if(clientAvailable == -1 || serverAvailable == -1)
+		if(clientAvailable == -1)
 		{
-			//EOF sent from client/server.
+			//EOF sent from client.
 			break;
 		}
-		else
+		else if(clientAvailable >= 0)
 		{
-			if(clientAvailable > 0)
+			if(!clientHeaderSet && clientAvailable >= messageheader::HEADER_LENGTH)
 			{
-				logger::log("Client Message");
+				clientHeaderSet = true;
 
-				instance.getSocket().readBuffer(clientData, 0, clientAvailable);
-				instance.getGameSocket().writeBuffer(clientData, 0, clientAvailable);
+				instance.getSocket().readBuffer(clientData, 0, messageheader::HEADER_LENGTH);
+				clientAvailable -= messageheader::HEADER_LENGTH;
+
+				clientHeader = messageheader::parse(clientData);
+
+				logger::log("[CLIENT] HEADER: " + byte::toHexString(clientData, 7));
+
+				logger::log("[CLIENT] ID: " + to_string(clientHeader.getId()));
+				logger::log("[CLIENT] PL: " + to_string(clientHeader.getPayloadLength()));
+				logger::log("[CLIENT] V: " + to_string(clientHeader.getVersion()));
 			}
 
-			if(serverAvailable > 0)
+			if(clientHeaderSet && clientAvailable >= clientHeader.getPayloadLength())
 			{
-				logger::log("Server Message");
+				clientHeaderSet = false;
 
-				instance.getGameSocket().readBuffer(serverData, 0, serverAvailable);
-				instance.getSocket().writeBuffer(serverData, 0, serverAvailable);
+				instance.getSocket().readBuffer(clientData, 0, clientHeader.getPayloadLength());
+
+				int messageLength = messageheader::HEADER_LENGTH + clientHeader.getPayloadLength();
+				unsigned char message[messageLength];
+
+				memcpy(message, clientHeader.array(), messageheader::HEADER_LENGTH);
+				memcpy(message + 7, clientData, clientHeader.getPayloadLength());
+
+				logger::log("[CLIENT] Payload: " + byte::toHexString(message, messageLength));
+
+				instance.getGameSocket().writeBuffer(message, 0, messageLength);
 			}
 		}
 	}
+}
 
-	/*
-	if(!instance.getSocket().connected())
+void client::runResponse(client instance)
+{
+	logger::log("Starting client response thread.");
+
+	unsigned char serverData[READ_BYTES];
+
+	int serverAvailable = 0;
+
+	bool serverHeaderSet = false;
+	messageheader serverHeader;
+
+	while(true)
 	{
-		//TODO: Client Disconnected
+		serverAvailable = instance.getGameSocket().available();
+
+		if(serverAvailable == -1)
+		{
+			//EOF from server.
+			break;
+		}
+		else if(serverAvailable >= 0)
+		{
+			if(!serverHeaderSet && serverAvailable >= messageheader::HEADER_LENGTH)
+			{
+				serverHeaderSet = true;
+
+				instance.getGameSocket().readBuffer(serverData, 0, messageheader::HEADER_LENGTH);
+				serverAvailable -= messageheader::HEADER_LENGTH;
+
+				serverHeader = messageheader::parse(serverData);
+
+				logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
+
+				logger::log("[SERVER] ID: " + to_string(serverHeader.getId()));
+				logger::log("[SERVER] PL: " + to_string(serverHeader.getPayloadLength()));
+				logger::log("[SERVER] V: " + to_string(serverHeader.getVersion()));
+			}
+
+			if(serverHeaderSet && serverAvailable >= serverHeader.getPayloadLength())
+			{
+				serverHeaderSet = false;
+
+				instance.getGameSocket().readBuffer(serverData, 0, serverHeader.getPayloadLength());
+
+				int messageLength = messageheader::HEADER_LENGTH + serverHeader.getPayloadLength();
+				unsigned char message[messageLength];
+
+				memcpy(message, serverHeader.array(), messageheader::HEADER_LENGTH);
+			    memcpy(message + 7, serverData, serverHeader.getPayloadLength());
+
+				logger::log("[SERVER] Payload: " + byte::toHexString(message, messageLength));
+
+				instance.getSocket().writeBuffer(message, 0, messageLength);
+			}
+		}
 	}
-	else if(!instance.getGameSocket().connected())
-	{
-		//TODO: Game Server Disconnected
-	}
-	*/
 }
 
 clientsocket client::getSocket()
