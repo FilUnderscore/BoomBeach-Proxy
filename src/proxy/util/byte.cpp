@@ -69,6 +69,30 @@ unsigned char* byte::fromString(string s)
 	return (unsigned char*)s.c_str();
 }
 
+unsigned char* byte::fromHexString(string s)
+{
+	unsigned char* dest = (unsigned char*) malloc(s.length() * 2);
+
+	while(*s.c_str() && s[1])
+	{
+		*(dest++) = charToInt(*s.c_str())*16 + charToInt(s[1]);
+		s += 2;
+	}
+
+	return dest;
+}
+
+int byte::charToInt(char input)
+{
+  if(input >= '0' && input <= '9')
+    return input - '0';
+  if(input >= 'A' && input <= 'F')
+    return input - 'A' + 10;
+  if(input >= 'a' && input <= 'f')
+    return input - 'a' + 10;
+  throw std::invalid_argument("Invalid input string");
+}
+
 //FROM CHAR* TO TYPE
 
 short byte::toInt16(unsigned char* buffer)

@@ -37,6 +37,8 @@ public:
 
 	static unsigned char* fromString(string s);
 
+	static unsigned char* fromHexString(string s);
+
 	//FROM CHAR* TO TYPE
 
 	static short toInt16(unsigned char* buffer);
@@ -52,5 +54,8 @@ public:
 	static string toString(unsigned char* buffer);
 
 	static string toHexString(unsigned char* buffer, int buffersize);
+
+private:
+	static int charToInt(char c);
 };
 #endif /* INCLUDE_BYTE_HPP_ */
