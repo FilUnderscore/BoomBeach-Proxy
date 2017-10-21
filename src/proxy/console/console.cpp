@@ -32,7 +32,8 @@ void console::init()
 
 		if(input == "stop")
 		{
-			logger::log("Stop");
+			logger::log("Stopping proxy...");
+
 			proxy::getProxy().stop();
 		}
 	}

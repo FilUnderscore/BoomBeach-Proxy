@@ -27,6 +27,8 @@ public:
 	clientsocket getSocket();
 	clientsocket getGameSocket();
 
+	void disconnect();
+
 protected:
 	/**
 	 * Client/Device connection

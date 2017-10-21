@@ -41,6 +41,8 @@ public:
 	string getHost();
 	int getPort();
 
+	void stop();
+
 private:
 	void initialize();
 

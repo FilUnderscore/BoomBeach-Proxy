@@ -17,6 +17,8 @@ proxy::~proxy()
 {
 	proxy::getProxy().con.~console();
 	proxy::getProxy().net.~network();
+
+	exit(0);
 }
 
 void proxy::init(string host, int port)

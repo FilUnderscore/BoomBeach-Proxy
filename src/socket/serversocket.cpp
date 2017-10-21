@@ -24,10 +24,7 @@ serversocket::serversocket(string host, int port)
 serversocket::serversocket(int port) : serversocket("127.0.0.1", port)
 {}
 
-serversocket::~serversocket()
-{
-	//TODO: Deinitialize
-}
+serversocket::~serversocket(){}
 
 void serversocket::initialize()
 {
@@ -85,6 +82,11 @@ clientsocket serversocket::acceptClient()
 	//TODO: Implement Winsock2
 	throw std::runtime_error("Windows support not implemented!");
 #endif
+}
+
+void serversocket::stop()
+{
+	close(this->socketId);
 }
 
 int serversocket::getSocketId()

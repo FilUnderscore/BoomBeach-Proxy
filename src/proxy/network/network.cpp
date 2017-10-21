@@ -18,6 +18,8 @@ network::network()
 network::~network()
 {
 	//TODO: Deinitialize
+	this->serverSocket.stop();
+
 	this->running = false;
 
 	clear();
@@ -29,6 +31,7 @@ void network::clear()
 {
 	for(int index = 0; index < this->clients.size(); index++)
 	{
+		this->clients.at(index).disconnect();
 		this->clients.at(index).~client();
 	}
 
@@ -37,16 +40,16 @@ void network::clear()
 
 void network::start()
 {
-	serversocket servsock("", 9339);
+	this->serverSocket = *new serversocket("", 9339);
 
-	logger::log("BoomBeach Proxy running. Connect via " + servsock.getHost() + ":" + to_string(proxy::getProxy().getPort()));
+	logger::log("BoomBeach Proxy running. Connect via " + this->serverSocket.getHost() + ":" + to_string(proxy::getProxy().getPort()));
 	logger::log("GPL v3.0 LICENSE - https://www.github.com/FilUnderscore/BoomBeach-Proxy");
 
 	this->running = true;
 
 	while(this->running)
 	{
-		clientsocket clisock = servsock.acceptClient();
+		clientsocket clisock = this->serverSocket.acceptClient();
 
 		this->connection(clisock);
 	}

@@ -24,9 +24,7 @@ clientsocket::clientsocket(string host, int port)
 }
 
 clientsocket::~clientsocket()
-{
-
-}
+{}
 
 void clientsocket::connectTo(string host, int port)
 {

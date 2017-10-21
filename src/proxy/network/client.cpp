@@ -26,12 +26,17 @@ client::client(clientsocket socket) : client()
 
 client::~client()
 {
-	this->socket.~clientsocket();
-	this->gameSocket.~clientsocket();
+
+}
+
+void client::disconnect()
+{
+	this->socket.disconnect();
+	this->gameSocket.disconnect();
 
 	//TODO: Deconstructors called during thread execution?
-	//this->clientRequestThread->~thread();
-	//this->clientResponseThread->~thread();
+	this->clientRequestThread->~thread();
+	this->clientResponseThread->~thread();
 }
 
 void client::runRequest(client instance)
