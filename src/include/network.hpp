@@ -26,15 +26,13 @@ public:
 
 	void connection(clientsocket socket);
 
-	void disconnect(client cli);
+	void disconnect(client cli, bool client);
 
 	void stop();
 
 protected:
 	vector<client> clients;
 	serversocket serverSocket;
-
-	static void thread(network instance, serversocket servsock);
 
 	bool running;
 };

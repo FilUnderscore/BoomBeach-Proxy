@@ -37,7 +37,7 @@ protected:
 
 	thread* clientThread;
 
-	static void init(client instance);
+	static void run(client instance);
 };
 
 #endif /* PROXY_NETWORK_CLIENT_HPP_ */

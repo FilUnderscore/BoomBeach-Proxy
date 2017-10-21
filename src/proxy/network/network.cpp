@@ -11,21 +11,24 @@
 
 network::network()
 {
-
+	this->running = false;
+	this->clients = *new vector<client>;
 }
 
 network::~network()
 {
+	//TODO: Deinitialize
+	this->running = false;
 
+	this->clients.~vector();
 }
 
 void network::start()
 {
-	this->clients = *new vector<client>;
+	serversocket servsock("", 9339);
 
-	serversocket servsock("127.0.0.1", 9339);
-
-	logger::log("Proxy running. Connect via " + servsock.getHost() + ":" + to_string(proxy::getProxy().getPort()));
+	logger::log("BoomBeach Proxy running. Connect via " + servsock.getHost() + ":" + to_string(proxy::getProxy().getPort()));
+	logger::log("GPL v3.0 LICENSE - https://www.github.com/FilUnderscore/BoomBeach-Proxy");
 
 	this->running = true;
 
@@ -33,43 +36,29 @@ void network::start()
 	{
 		clientsocket clisock = servsock.acceptClient();
 
-		client cli(clisock);
-
-		this->clients.push_back(cli);
-
-		unsigned char arr[4096];
-
-		int n = cli.getSocket().readBuffer(arr, 0, 4096);
-
-		logger::log(to_string(n));
-
-		//TEST - WORKS
-
-		cli.getGameSocket().writeBuffer(arr, 0, n);
-
-		int no = cli.getGameSocket().readBuffer(arr, 0, 4096);
-
-		logger::log(to_string(no));
-
-		//TEST END
-
-		logger::log("new client");
+		this->connection(clisock);
 	}
-}
-
-void network::thread(network instance, serversocket servsock)
-{
-
 }
 
 void network::connection(clientsocket socket)
 {
+	client cli(socket);
 
+	this->clients.push_back(cli);
+
+	logger::log("Client connected.");
 }
 
-void network::disconnect(client client)
+void network::disconnect(client cli, bool client)
 {
-
+	if(client)
+	{
+		//Client socket disconnect
+	}
+	else
+	{
+		//Game server socket disconnect
+	}
 }
 
 void network::stop()

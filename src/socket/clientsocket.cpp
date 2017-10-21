@@ -7,8 +7,6 @@
 
 #include "../include/clientsocket.hpp"
 #include "../include/logger.hpp"
-#include <cstring>
-#include <array>
 
 clientsocket::clientsocket()
 {
@@ -37,6 +35,7 @@ void clientsocket::connectTo(string host, int port)
 	struct sockaddr_in serv_addr;
 
 	clientSocketId = socket(AF_INET, SOCK_STREAM, 0);
+	//fcntl(clientSocketId, F_SETFL, O_NONBLOCK);
 
 	if(clientSocketId < 0)
 	{
@@ -45,9 +44,6 @@ void clientsocket::connectTo(string host, int port)
 
 	//AF_INET for IPv4 support.
 	serv_addr.sin_family = AF_INET;
-
-	//Debug
-	logger::log("Host: " + std::string(host) + " | Port: " + to_string(port));
 
 	long hostAddress;
 	hostent* hostInfo = gethostbyname(host.c_str());
@@ -59,12 +55,26 @@ void clientsocket::connectTo(string host, int port)
 
 	serv_addr.sin_port = htons(port);
 
-	if(connect(clientSocketId, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+	int err = connect(clientSocketId, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+
+	if(err < 0)
 	{
-		throw std::runtime_error("Failed to connect to host.");
+		throw std::runtime_error("Failed to connect to host. " + to_string(errno));
 	}
 
 	this->socketId = clientSocketId;
+	this->conn = true;
+}
+
+bool clientsocket::connected()
+{
+	return this->conn;
+}
+
+void clientsocket::disconnect()
+{
+	this->conn = false;
+	close(this->socketId);
 }
 
 int clientsocket::getSocketId()
@@ -85,4 +95,13 @@ int clientsocket::readBuffer(unsigned char* array, off_t offset, size_t length)
 	int bytes_read = read(this->socketId, array, length);
 
 	return bytes_read;
+}
+
+int clientsocket::available()
+{
+	int bytesAvailable;
+
+	ioctl(this->socketId, FIONREAD, &bytesAvailable);
+
+	return bytesAvailable;
 }

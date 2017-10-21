@@ -35,6 +35,11 @@ void proxy::stop()
 
 }
 
+network proxy::getNetwork()
+{
+	return this->net;
+}
+
 string proxy::getHost()
 {
 	return this->host;

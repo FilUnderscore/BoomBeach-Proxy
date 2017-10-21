@@ -15,12 +15,16 @@
 
 #include <unistd.h>
 
+#include <cstring>
+
 #ifndef __WIN32__
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
 #else
 //TODO: Implement Winsock2
 #endif
@@ -38,16 +42,24 @@ public:
 
 	void connectTo(string host, int port);
 
+	bool connected();
+
+	void disconnect();
+
 	//void writeBuffer(unsigned char* data);
 	void writeBuffer(unsigned char* data, off_t offset, size_t length);
 
 	//int readBuffer(unsigned char* array);
 	int readBuffer(unsigned char* array, off_t offset, size_t length);
 
+	int available();
+
 	int getSocketId();
 
 protected:
 	int socketId;
+
+	bool conn;
 };
 
 #endif /* SOCKET_CLIENTSOCKET_HPP_ */
