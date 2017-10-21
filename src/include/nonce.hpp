@@ -8,16 +8,20 @@
 #ifndef INCLUDE_NONCE_HPP_
 #define INCLUDE_NONCE_HPP_
 
+/**
+ * cant be named nonce otherwise interferes with c++ libraries.
+ */
 class nonce
 {
 private:
 	unsigned char* bytes;
+	int bytes_len;
 
 public:
 	nonce();
-	nonce(unsigned char* nonce);
-	nonce(unsigned char* clientKey, unsigned char* serverKey);
-	nonce(unsigned char* clientKey, unsigned char* serverKey, unsigned char* nonce);
+	nonce(unsigned char* nc, int nonce_len);
+	nonce(unsigned char* clientKey, int client_key_len, unsigned char* serverKey, int server_key_len);
+	nonce(unsigned char* clientKey, int client_key_len, unsigned char* serverKey, int server_key_len, unsigned char* nc, int nonce_len);
 
 	void increment();
 
