@@ -38,11 +38,11 @@ public:
 
 	void connectTo(string host, int port);
 
-	void write(void* data);
-	void write(void* data, int offset, int length);
+	//void writeBuffer(unsigned char* data);
+	void writeBuffer(unsigned char* data, off_t offset, size_t length);
 
-	void read(void* array);
-	void read(void* array, int offset, int length);
+	//int readBuffer(unsigned char* array);
+	int readBuffer(unsigned char* array, off_t offset, size_t length);
 
 	int getSocketId();
 

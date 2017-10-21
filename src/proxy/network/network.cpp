@@ -33,21 +33,25 @@ void network::start()
 	{
 		clientsocket clisock = servsock.acceptClient();
 
-		logger::log("C");
-
 		client cli(clisock);
-
-		logger::log("D");
 
 		this->clients.push_back(cli);
 
-		logger::log("E");
+		unsigned char arr[4096];
 
-		//void* arr = malloc(100);
+		int n = cli.getSocket().readBuffer(arr, 0, 4096);
 
-		//cli.getSocket().read(arr);
+		logger::log(to_string(n));
 
-		//logger::log("L: " + sizeof(arr));
+		//TEST - WORKS
+
+		cli.getGameSocket().writeBuffer(arr, 0, n);
+
+		int no = cli.getGameSocket().readBuffer(arr, 0, 4096);
+
+		logger::log(to_string(no));
+
+		//TEST END
 
 		logger::log("new client");
 	}

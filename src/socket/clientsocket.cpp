@@ -7,6 +7,8 @@
 
 #include "../include/clientsocket.hpp"
 #include "../include/logger.hpp"
+#include <cstring>
+#include <array>
 
 clientsocket::clientsocket()
 {
@@ -44,9 +46,16 @@ void clientsocket::connectTo(string host, int port)
 	//AF_INET for IPv4 support.
 	serv_addr.sin_family = AF_INET;
 
+	//Debug
 	logger::log("Host: " + std::string(host) + " | Port: " + to_string(port));
 
-	inet_pton(AF_INET, host.c_str(), &serv_addr.sin_addr);
+	long hostAddress;
+	hostent* hostInfo = gethostbyname(host.c_str());
+
+	std::memset(&hostAddress, 0, sizeof(hostAddress));
+	memcpy(&hostAddress,hostInfo->h_addr,hostInfo->h_length);
+
+	serv_addr.sin_addr.s_addr = hostAddress;
 
 	serv_addr.sin_port = htons(port);
 
@@ -63,22 +72,17 @@ int clientsocket::getSocketId()
 	return this->socketId;
 }
 
-void clientsocket::write(void* data)
+void clientsocket::writeBuffer(unsigned char* data, off_t offset, size_t length)
 {
-	this->write(data, 0, sizeof(data));
+	lseek(this->socketId, offset, SEEK_SET);
+
+	write(this->socketId, data, length);
 }
 
-void clientsocket::write(void* data, int offset, int length)
+int clientsocket::readBuffer(unsigned char* array, off_t offset, size_t length)
 {
-	pwrite(this->socketId, data, length, offset);
-}
+	lseek(this->socketId, offset, SEEK_SET);
+	int bytes_read = read(this->socketId, array, length);
 
-void clientsocket::read(void* data)
-{
-	this->read(data, 0, sizeof(data));
-}
-
-void clientsocket::read(void* array, int offset, int length)
-{
-	pread(this->socketId, array, length, offset);
+	return bytes_read;
 }

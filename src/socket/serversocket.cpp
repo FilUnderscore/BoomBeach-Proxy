@@ -7,6 +7,7 @@
 
 #include "../include/serversocket.hpp"
 #include "../include/logger.hpp"
+#include <array>
 
 serversocket::serversocket()
 {
@@ -81,6 +82,8 @@ clientsocket serversocket::acceptClient()
 
 	if(clientSocketId < 0)
 		throw std::runtime_error("Failed when attempting to connect clientsocket.");
+
+	logger::log("clientSocketId: " + clientSocketId);
 
 	return clientsocket(clientSocketId);
 #else
