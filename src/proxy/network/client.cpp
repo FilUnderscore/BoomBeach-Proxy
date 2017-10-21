@@ -9,6 +9,7 @@
 #include "../../include/proxy.hpp"
 
 #include "../../include/messageheader.hpp"
+#include "../../include/messagemap.hpp"
 
 client::client() {}
 
@@ -74,6 +75,7 @@ void client::runRequest(client instance)
 
 				logger::log("[CLIENT] HEADER: " + byte::toHexString(clientData, 7));
 
+				logger::log("[CLIENT] " + messagemap::getName(clientHeader.getId()));
 				logger::log("[CLIENT] ID: " + to_string(clientHeader.getId()));
 				logger::log("[CLIENT] PL: " + to_string(clientHeader.getPayloadLength()));
 				logger::log("[CLIENT] V: " + to_string(clientHeader.getVersion()));
@@ -138,6 +140,7 @@ void client::runResponse(client instance)
 
 				logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
 
+				logger::log("[SERVER] " + messagemap::getName(serverHeader.getId()));
 				logger::log("[SERVER] ID: " + to_string(serverHeader.getId()));
 				logger::log("[SERVER] PL: " + to_string(serverHeader.getPayloadLength()));
 				logger::log("[SERVER] V: " + to_string(serverHeader.getVersion()));
