@@ -82,6 +82,7 @@ void client::runRequest(client instance)
 				memcpy(message + 7, clientData, clientHeader.getPayloadLength());
 
 				logger::log("[CLIENT] Payload: " + byte::toHexString(message, messageLength));
+				logger::log("");
 
 				instance.getGameSocket().writeBuffer(message, 0, messageLength);
 			}
@@ -140,6 +141,7 @@ void client::runResponse(client instance)
 			    memcpy(message + 7, serverData, serverHeader.getPayloadLength());
 
 				logger::log("[SERVER] Payload: " + byte::toHexString(message, messageLength));
+				logger::log("");
 
 				instance.getSocket().writeBuffer(message, 0, messageLength);
 			}
