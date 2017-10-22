@@ -2,7 +2,7 @@
  * servercrypto.cpp
  *
  *  Created on: 22/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #include "../../../include/servercrypto.hpp"

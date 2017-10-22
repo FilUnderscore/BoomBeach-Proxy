@@ -23,11 +23,6 @@ byte_array byte::fromInt24(int i)
 {
 	byte_array array(INT24_LENGTH);
 
-	//array.buffer[0] = (0xFF >> 24) & 0xFF;
-	//array.buffer[1] = (i >> 16) & 0xFF;
-	//array.buffer[2] = (i >> 8) & 0xFF;
-	//array.buffer[3] = i & 0xFF;
-
 	array.buffer[0] = (i >> 16) & 0xFF;
 	array.buffer[1] = (i >> 8) & 0xFF;
 	array.buffer[2] = i & 0xFF;
@@ -101,7 +96,7 @@ int byte::charToInt(char input)
   throw std::invalid_argument("Invalid input string");
 }
 
-//FROM CHAR* TO TYPE
+//FROM byte[] TO TYPE
 
 short byte::toInt16(byte_array array)
 {
@@ -110,7 +105,6 @@ short byte::toInt16(byte_array array)
 
 int byte::toInt24(byte_array array)
 {
-	//return (array.buffer[1] << 16) | (array.buffer[2] << 8) | array.buffer[3];
 	return (array.buffer[0] << 16) | (array.buffer[1] << 8) | array.buffer[2];
 }
 

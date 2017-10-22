@@ -2,7 +2,7 @@
  * bytearray.hpp
  *
  *  Created on: 22/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #ifndef INCLUDE_BYTE_ARRAY_HPP_
@@ -17,10 +17,7 @@ struct byte_array
 	unsigned char* buffer;
 	int len;
 
-	byte_array()
-	{
-
-	}
+	byte_array() : byte_array(0) {}
 
 	byte_array(int array_len) : byte_array((unsigned char*)malloc(array_len), array_len) {}
 

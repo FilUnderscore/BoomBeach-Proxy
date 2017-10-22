@@ -41,7 +41,7 @@ public:
 
 	static byte_array fromHexString(string s);
 
-	//FROM CHAR* TO TYPE
+	//FROM byte[] TO TYPE
 
 	static short toInt16(byte_array buffer);
 

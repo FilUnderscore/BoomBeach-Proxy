@@ -73,10 +73,10 @@ void client::runRequest(client instance)
 
 				clientHeader = messageheader::parse(clientPayload);
 
-				logger::log("[CLIENT] " + messagemap::getName(clientHeader.getId()));
+				logger::log("[CLIENT] Message " + messagemap::getName(clientHeader.getId()));
 				logger::log("[CLIENT] ID: " + to_string(clientHeader.getId()));
-				logger::log("[CLIENT] PL: " + to_string(clientHeader.getPayloadLength()));
-				logger::log("[CLIENT] V: " + to_string(clientHeader.getVersion()));
+				logger::log("[CLIENT] Payload Length: " + to_string(clientHeader.getPayloadLength()));
+				logger::log("[CLIENT] Version: " + to_string(clientHeader.getVersion()));
 			}
 
 			if(clientHeaderSet && clientAvailable >= clientHeader.getPayloadLength())
@@ -95,7 +95,7 @@ void client::runRequest(client instance)
 
 				memcpy(message.buffer + 7, clientPayload.buffer, clientHeader.getPayloadLength());
 
-				logger::log("[SERVER] Payload: " + byte::toHexString(clientPayload));
+				logger::log("[CLIENT] Payload [HEX]: " + byte::toHexString(clientPayload));
 				logger::log("");
 
 				instance.getGameSocket().writeBuffer(message.buffer, 0, message.len);
@@ -139,10 +139,10 @@ void client::runResponse(client instance)
 
 				//logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
 
-				logger::log("[SERVER] " + messagemap::getName(serverHeader.getId()));
+				logger::log("[SERVER] Message " + messagemap::getName(serverHeader.getId()));
 				logger::log("[SERVER] ID: " + to_string(serverHeader.getId()));
-				logger::log("[SERVER] PL: " + to_string(serverHeader.getPayloadLength()));
-				logger::log("[SERVER] V: " + to_string(serverHeader.getVersion()));
+				logger::log("[SERVER] Payload Length: " + to_string(serverHeader.getPayloadLength()));
+				logger::log("[SERVER] Version: " + to_string(serverHeader.getVersion()));
 			}
 
 			if(serverHeaderSet && serverAvailable >= serverHeader.getPayloadLength())
@@ -161,7 +161,7 @@ void client::runResponse(client instance)
 
 				memcpy(message.buffer + 7, serverPayload.buffer, serverHeader.getPayloadLength());
 
-				logger::log("[SERVER] Payload: " + byte::toHexString(serverPayload));
+				logger::log("[SERVER] Payload [HEX]: " + byte::toHexString(serverPayload));
 				logger::log("");
 
 				instance.getSocket().writeBuffer(message.buffer, 0, message.len);
