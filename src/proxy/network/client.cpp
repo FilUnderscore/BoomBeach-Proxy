@@ -19,10 +19,10 @@ client::client(clientsocket socket) : client()
 	this->gameSocket = *new clientsocket(proxy::getProxy().getHost(), proxy::getProxy().getPort());
 
 #ifndef __WIN32__
-	this->clientRequestThread = new thread(runRequest);
+	this->clientRequestThread = new thread(runRequest, *this);
 	this->clientRequestThread->detach();
 
-	this->clientResponseThread = new thread(runResponse);
+	this->clientResponseThread = new thread(runResponse, *this);
 	this->clientResponseThread->detach();
 #else
 
@@ -41,14 +41,14 @@ void client::disconnect()
 
 #ifndef __WIN32__
 	//TODO: Deconstructors called during thread execution?
-	this->clientRequestThread->~compatthread();
-	this->clientResponseThread->~compatthread();
+	this->clientRequestThread->~thread();
+	this->clientResponseThread->~thread();
 #else
 
 #endif
 }
 
-void client::runRequest()
+void client::runRequest(client instance)
 {
 	logger::log("Starting client request thread.");
 
@@ -61,7 +61,7 @@ void client::runRequest()
 
 	while(true)
 	{
-		clientAvailable = this->getSocket().available();
+		clientAvailable = instance.getSocket().available();
 
 		if(clientAvailable == -1)
 		{
@@ -74,7 +74,7 @@ void client::runRequest()
 			{
 				clientHeaderSet = true;
 
-				this->getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				instance.getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
 				clientPayload.len = messageheader::HEADER_LENGTH;
 
 				clientAvailable -= messageheader::HEADER_LENGTH;
@@ -91,7 +91,7 @@ void client::runRequest()
 			{
 				clientHeaderSet = false;
 
-				this->getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
+				instance.getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
 
 				byte_array message(messageheader::HEADER_LENGTH + clientHeader.getPayloadLength());
 
@@ -106,13 +106,13 @@ void client::runRequest()
 				logger::log("[CLIENT] Payload [HEX]: " + bytes::toHexString(clientPayload));
 				logger::log("");
 
-				this->getGameSocket().writeBuffer(message.buffer, 0, message.len);
+				instance.getGameSocket().writeBuffer(message.buffer, 0, message.len);
 			}
 		}
 	}
 }
 
-void client::runResponse()
+void client::runResponse(client instance)
 {
 	logger::log("Starting client response thread.");
 
@@ -125,7 +125,7 @@ void client::runResponse()
 
 	while(true)
 	{
-		serverAvailable = this->getGameSocket().available();
+		serverAvailable = instance.getGameSocket().available();
 
 		if(serverAvailable == -1)
 		{
@@ -138,7 +138,7 @@ void client::runResponse()
 			{
 				serverHeaderSet = true;
 
-				this->getGameSocket().readBuffer(serverPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, messageheader::HEADER_LENGTH);
 				serverPayload.len = messageheader::HEADER_LENGTH;
 
 				serverAvailable -= messageheader::HEADER_LENGTH;
@@ -157,7 +157,7 @@ void client::runResponse()
 			{
 				serverHeaderSet = false;
 
-				this->getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
+				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
 
 				byte_array message(messageheader::HEADER_LENGTH + serverHeader.getPayloadLength());
 
@@ -172,7 +172,7 @@ void client::runResponse()
 				logger::log("[SERVER] Payload [HEX]: " + bytes::toHexString(serverPayload));
 				logger::log("");
 
-				this->getSocket().writeBuffer(message.buffer, 0, message.len);
+				instance.getSocket().writeBuffer(message.buffer, 0, message.len);
 			}
 		}
 	}
