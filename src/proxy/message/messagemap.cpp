@@ -62,6 +62,8 @@ void messagemap::initialize()
 
 	messages.insert({14102, "ClientCommands"});
 
+	messages.insert({14403, "ClientAskForAvatarRankingList"});
+
 	/*
 	 * SERVER
 	 */
@@ -79,9 +81,14 @@ void messagemap::initialize()
 
 	messages.insert({24351, "ServerUnknown1"});
 	messages.insert({25100, "ServerUnknown2"});
-	messages.insert({20118, "ServerUnknown3"});
-	messages.insert({24497, "ServerUnknown4"});
-	messages.insert({24411, "ServerUnknown5"});
+
+	messages.insert({20118, "ServerChatAccountBanStatus"});
+
+	messages.insert({24497, "ServerUnknown3"});
+
+	messages.insert({24411, "ServerAvatarStream"});
 
 	messages.insert({24111, "ServerCommand"});
+
+	messages.insert({24403, "ServerAvatarRankingList"});
 }
