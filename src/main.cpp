@@ -14,6 +14,10 @@
 int main(int argc, char** argv)
 {
 	//Starts the proxy with the default Supercell Game Server Port
+
+	//Log to file, uncomment.
+	//logger::file("proxy.log");
+
 	proxy::init(proxy::DEFAULT_HOST, proxy::DEFAULT_PORT);
 
 	return 0;

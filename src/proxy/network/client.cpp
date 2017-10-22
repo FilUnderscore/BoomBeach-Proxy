@@ -73,7 +73,7 @@ void client::runRequest(client instance)
 
 				clientHeader = messageheader::parse(clientPayload);
 
-				logger::log("[CLIENT] Message " + messagemap::getName(clientHeader.getId()));
+				logger::log("[CLIENT] Message: " + messagemap::getName(clientHeader.getId()));
 				logger::log("[CLIENT] ID: " + to_string(clientHeader.getId()));
 				logger::log("[CLIENT] Payload Length: " + to_string(clientHeader.getPayloadLength()));
 				logger::log("[CLIENT] Version: " + to_string(clientHeader.getVersion()));
@@ -139,7 +139,7 @@ void client::runResponse(client instance)
 
 				//logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
 
-				logger::log("[SERVER] Message " + messagemap::getName(serverHeader.getId()));
+				logger::log("[SERVER] Message: " + messagemap::getName(serverHeader.getId()));
 				logger::log("[SERVER] ID: " + to_string(serverHeader.getId()));
 				logger::log("[SERVER] Payload Length: " + to_string(serverHeader.getPayloadLength()));
 				logger::log("[SERVER] Version: " + to_string(serverHeader.getVersion()));
