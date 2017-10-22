@@ -49,12 +49,15 @@ protected:
 	thread* clientRequestThread;
 	thread* clientResponseThread;
 #else
-	DWORD clientRequestThread;
-	DWORD clientResponseThread;
+	PDWORD clientRequestThread;
+	PDWORD clientResponseThread;
 #endif
 
-	void runRequest();
-	void runResponse();
+	/**
+	 * Required to be static otherwise std::thread needs struct instance.
+	 */
+	static void runRequest(client instance);
+	static void runResponse(client instance);
 };
 
 #endif /* PROXY_NETWORK_CLIENT_HPP_ */

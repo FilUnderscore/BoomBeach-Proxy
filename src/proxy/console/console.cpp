@@ -17,7 +17,7 @@ console::console()
 
 console::~console()
 {
-	this->consoleThread->~compatthread();
+	this->consoleThread->~thread();
 }
 #endif
 

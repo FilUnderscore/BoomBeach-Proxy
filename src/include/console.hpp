@@ -22,8 +22,7 @@ public:
 #ifndef __WIN32__
 	console();
 	~console();
-#endif
-
+#else
 	console()
 	{
 		HANDLE handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)initConsole, this, 0, this->consoleThread);
@@ -33,9 +32,10 @@ public:
 	{
 
 	}
+#endif
 
 protected:
-	void init();
+	static void init();
 #ifdef __WIN32__
 	PDWORD consoleThread;
 
