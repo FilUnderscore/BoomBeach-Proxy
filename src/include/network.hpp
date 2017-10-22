@@ -32,7 +32,7 @@ public:
 
 protected:
 	vector<client> clients;
-	serversocket serverSocket;
+	serversocket* serverSocket;
 
 	bool running;
 

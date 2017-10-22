@@ -16,10 +16,10 @@
 #ifndef __WIN32__
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
 #include <netdb.h>
 #else
 //Implement Winsock2
+#include <Winsock2.h>
 #endif
 
 using namespace std;

@@ -15,6 +15,7 @@ clientsocket::clientsocket()
 
 clientsocket::clientsocket(int socketId)
 {
+	this->conn = true;
 	this->socketId = socketId;
 }
 
