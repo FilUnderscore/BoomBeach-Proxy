@@ -5,7 +5,7 @@
  *      Author: filip
  */
 
-#include "../include/logger.hpp"
+#include "../include/logger/logger.hpp"
 
 bool logger::fileInitialized = false;
 string logger::logFileName = "";

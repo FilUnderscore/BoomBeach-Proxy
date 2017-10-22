@@ -8,7 +8,7 @@
 #ifndef PROXY_MESSAGE_MESSAGE_HPP_
 #define PROXY_MESSAGE_MESSAGE_HPP_
 
-#include "byte_array.hpp"
+#include "../util/byte_array.hpp"
 #include "messageheader.hpp"
 
 class message

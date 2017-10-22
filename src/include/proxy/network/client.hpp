@@ -8,7 +8,7 @@
 #ifndef PROXY_NETWORK_CLIENT_HPP_
 #define PROXY_NETWORK_CLIENT_HPP_
 
-#include "clientsocket.hpp"
+#include "../../socket/clientsocket.hpp"
 
 #ifndef __WIN32__
 #include <thread>

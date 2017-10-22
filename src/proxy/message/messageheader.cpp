@@ -5,9 +5,9 @@
  *      Author: filip
  */
 
-#include "../../include/messageheader.hpp"
+#include "../../include/proxy/message/messageheader.hpp"
 #include <cstring>
-#include "../../include/logger.hpp"
+#include "../../include/logger/logger.hpp"
 
 messageheader::messageheader()
 {}

@@ -5,7 +5,7 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../../include/servercrypto.hpp"
+#include "../../../include/proxy/crypto/sodium/servercrypto.hpp"
 
 servercrypto::servercrypto(string magicKey)
 {

@@ -5,11 +5,13 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../include/client.hpp"
-#include "../../include/proxy.hpp"
+#include "../../include/proxy/network/client.hpp"
+#include "../../include/proxy/proxy.hpp"
 
-#include "../../include/messageheader.hpp"
-#include "../../include/messagemap.hpp"
+#include "../../include/logger/logger.hpp"
+
+#include "../../include/proxy/message/messageheader.hpp"
+#include "../../include/proxy/message/messagemap.hpp"
 
 client::client() {}
 
@@ -93,15 +95,10 @@ void client::runRequest(client instance)
 
 				instance.getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
 
-				byte_array message(messageheader::HEADER_LENGTH + clientHeader.getPayloadLength());
+				message msg(clientHeader);
+				msg.setEncryptedPayload(clientPayload);
 
-				byte_array header = clientHeader.array();
-
-				memcpy(message.buffer, header.buffer, messageheader::HEADER_LENGTH);
-
-				free(header.buffer);
-
-				memcpy(message.buffer + 7, clientPayload.buffer, clientHeader.getPayloadLength());
+				byte_array message = proxy::getProxy().getNetwork()->processMessage(msg);
 
 				logger::log("[CLIENT] Payload [HEX]: " + bytes::toHexString(clientPayload));
 				logger::log("");
@@ -145,8 +142,6 @@ void client::runResponse(client instance)
 
 				serverHeader = messageheader::parse(serverPayload);
 
-				//logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
-
 				logger::log("[SERVER] Message: " + messagemap::getName(serverHeader.getId()));
 				logger::log("[SERVER] ID: " + to_string(serverHeader.getId()));
 				logger::log("[SERVER] Payload Length: " + to_string(serverHeader.getPayloadLength()));
@@ -159,15 +154,10 @@ void client::runResponse(client instance)
 
 				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
 
-				byte_array message(messageheader::HEADER_LENGTH + serverHeader.getPayloadLength());
+				message msg(serverHeader);
+				msg.setEncryptedPayload(serverPayload);
 
-				byte_array header = serverHeader.array();
-
-				memcpy(message.buffer, header.buffer, messageheader::HEADER_LENGTH);
-
-				free(header.buffer);
-
-				memcpy(message.buffer + 7, serverPayload.buffer, serverHeader.getPayloadLength());
+				byte_array message = proxy::getProxy().getNetwork()->processMessage(msg);
 
 				logger::log("[SERVER] Payload [HEX]: " + bytes::toHexString(serverPayload));
 				logger::log("");

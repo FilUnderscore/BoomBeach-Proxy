@@ -5,9 +5,9 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../include/network.hpp"
-#include "../../include/logger.hpp"
-#include "../../include/proxy.hpp"
+#include "../../include/proxy/network/network.hpp"
+#include "../../include/logger/logger.hpp"
+#include "../../include/proxy/proxy.hpp"
 
 network::network()
 {
@@ -62,6 +62,18 @@ void network::connection(clientsocket socket)
 	this->clients.push_back(cli);
 
 	logger::log("Client connected.");
+}
+
+byte_array network::processMessage(message msg)
+{
+	byte_array message(messageheader::HEADER_LENGTH + msg.getHeader().getPayloadLength());
+	byte_array header = msg.getHeader().array();
+
+	memcpy(message.buffer, header.buffer, messageheader::HEADER_LENGTH);
+	free(header.buffer);
+	memcpy(message.buffer + 7, msg.getEncryptedPayload().buffer, msg.getHeader().getPayloadLength());
+
+	return message;
 }
 
 void network::disconnect(client cli, bool client)

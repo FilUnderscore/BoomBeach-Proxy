@@ -9,7 +9,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "../../../include/nonce.hpp"
+#include "../../../include/proxy/crypto/sodium/nonce.hpp"
 
 nonce::nonce()
 {

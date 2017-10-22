@@ -5,11 +5,16 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../include/message.hpp"
+#include "../../include/proxy/message/message.hpp"
 
 message::message(messageheader header)
 {
 	this->header = header;
+}
+
+message::~message()
+{
+
 }
 
 messageheader message::getHeader()

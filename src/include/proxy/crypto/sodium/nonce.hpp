@@ -8,7 +8,7 @@
 #ifndef INCLUDE_NONCE_HPP_
 #define INCLUDE_NONCE_HPP_
 
-#include "bytes.hpp"
+#include "../../util/bytes.hpp"
 
 class nonce
 {

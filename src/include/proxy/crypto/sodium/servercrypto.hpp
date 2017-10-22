@@ -9,7 +9,7 @@
 #define INCLUDE_SERVERCRYPTO_HPP_
 
 #include "basecrypto.hpp"
-#include "messagemap.hpp"
+#include "../../message/messagemap.hpp"
 
 #include <string>
 

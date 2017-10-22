@@ -11,10 +11,10 @@
 #include <iostream>
 #include <string>
 
-#include "console.hpp"
-#include "network.hpp"
+#include "console/console.hpp"
+#include "network/network.hpp"
 
-#include "logger.hpp"
+#include "../logger/logger.hpp"
 
 using namespace std;
 
@@ -42,14 +42,14 @@ public:
 		return instance;
 	}
 
-	network getNetwork();
+	network* getNetwork();
 
 protected:
 	string host;
 	int port;
 
-	console con;
-	network net;
+	console* con;
+	network* net;
 
 private:
 	static proxy* instance;

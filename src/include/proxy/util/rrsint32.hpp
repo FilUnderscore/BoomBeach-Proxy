@@ -8,9 +8,18 @@
 #ifndef INCLUDE_RRSINT32_HPP_
 #define INCLUDE_RRSINT32_HPP_
 
-class rrsint32
+#include "../io/binstream.hpp"
+
+struct rrsint32
 {
-	//TODO: Add support for RRSInt32
+	int length;
+	unsigned int value;
+
+	rrsint32(int length, long value)
+	{
+		this->length = length;
+		this->value = value;
+	}
 };
 
 #endif /* INCLUDE_RRSINT32_HPP_ */

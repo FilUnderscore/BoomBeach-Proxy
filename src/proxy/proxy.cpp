@@ -5,7 +5,7 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../include/proxy.hpp"
+#include "../include/proxy/proxy.hpp"
 
 const string proxy::DEFAULT_HOST = "game.boombeachgame.com"; //22 chars long.
 
@@ -15,8 +15,8 @@ proxy::proxy() {}
 
 proxy::~proxy()
 {
-	proxy::getProxy().con.~console();
-	proxy::getProxy().net.~network();
+	proxy::getProxy().con->~console();
+	proxy::getProxy().net->~network();
 
 	exit(0);
 }
@@ -26,10 +26,10 @@ void proxy::init(string host, int port)
 	proxy::getProxy().host = host;
 	proxy::getProxy().port = port;
 
-	proxy::getProxy().con = *new console();
+	proxy::getProxy().con = new console();
 
-	proxy::getProxy().net = *new network();
-	proxy::getProxy().net.start();
+	proxy::getProxy().net = new network();
+	proxy::getProxy().net->start();
 }
 
 void proxy::stop()
@@ -37,7 +37,7 @@ void proxy::stop()
 	proxy::getProxy().~proxy();
 }
 
-network proxy::getNetwork()
+network* proxy::getNetwork()
 {
 	return this->net;
 }

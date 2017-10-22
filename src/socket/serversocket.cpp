@@ -5,8 +5,8 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../include/serversocket.hpp"
-#include "../include/logger.hpp"
+#include "../include/socket/serversocket.hpp"
+#include "../include/logger/logger.hpp"
 
 serversocket::serversocket()
 {}

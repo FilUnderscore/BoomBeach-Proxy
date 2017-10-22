@@ -8,7 +8,7 @@
 #ifndef INCLUDE_MESSAGEHEADER_HPP_
 #define INCLUDE_MESSAGEHEADER_HPP_
 
-#include "bytes.hpp"
+#include "../util/bytes.hpp"
 
 class messageheader
 {

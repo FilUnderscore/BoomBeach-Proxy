@@ -5,7 +5,7 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../include/messagemap.hpp"
+#include "../../include/proxy/message/messagemap.hpp"
 #include <strings.h>
 
 bool messagemap::initialized = false;

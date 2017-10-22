@@ -5,7 +5,7 @@
  *      Author: Filip Jerkovic
  */
 
-#include "include/proxy.hpp"
+#include "include/proxy/proxy.hpp"
 
 /*
  * argc - argument count

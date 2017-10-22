@@ -9,7 +9,8 @@
 #define PROXY_NETWORK_NETWORK_HPP_
 
 #include "client.hpp"
-#include "serversocket.hpp"
+#include "../../socket/serversocket.hpp"
+#include "../message/message.hpp"
 
 #include <vector>
 #include <thread>
@@ -25,6 +26,8 @@ public:
 	void start();
 
 	void connection(clientsocket socket);
+
+	byte_array processMessage(message message);
 
 	void disconnect(client cli, bool client);
 

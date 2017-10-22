@@ -5,8 +5,10 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../include/bytes.hpp"
-#include "../../include/logger.hpp"
+#include "../../include/proxy/util/bytes.hpp"
+#include "../../include/proxy/util/rrsint32.hpp"
+#include "../../include/logger/logger.hpp"
+#include "../../include/proxy/io/binstream.hpp"
 
 //FROM TYPE TO byte[]
 byte_array bytes::fromInt16(short s)
@@ -60,6 +62,7 @@ byte_array bytes::fromInt64(long l)
 
 byte_array bytes::fromRrsInt32(rrsint32 r)
 {
+	//TODO: Implement
 	return *new byte_array(0);
 }
 
@@ -122,7 +125,35 @@ long bytes::toInt64(byte_array array)
 
 rrsint32 bytes::toRrsInt32(byte_array array)
 {
-	return rrsint32();
+	int c = 0;
+	unsigned int value = 0;
+	unsigned char seventh;
+	unsigned char msb;
+	unsigned char b;
+
+	binstream in(array);
+
+	do
+	{
+		b = in.read();
+
+		if(c == 0)
+		{
+			seventh = (b & 0x40) >> 6; //save 7th bit
+			msb = (b & 0x80) >> 7; //save msb
+			b = b << 1; //rotate to the left
+			b = b & ~(0x181); //clear 8th and 1st bit and 9th if any
+			b = b | (msb << 7) | (seventh); //insert msb and 6th back in
+		}
+
+		value |= (b & 0x7F) << (7 * c);
+		c++;
+	}
+	while((b & 0x80) != 0);
+
+	value = ((value >> 1) ^ -(value & 1));
+
+	return *new rrsint32(c, value);
 }
 
 string bytes::toString(byte_array array)

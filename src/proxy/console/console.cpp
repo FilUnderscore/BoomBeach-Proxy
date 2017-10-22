@@ -5,8 +5,8 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../../include/console.hpp"
-#include "../../include/proxy.hpp"
+#include "../../include/proxy/console/console.hpp"
+#include "../../include/proxy/proxy.hpp"
 
 #ifndef __WIN32__
 console::console()

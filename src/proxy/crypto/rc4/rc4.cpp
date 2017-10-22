@@ -10,7 +10,7 @@
  * https://github.com/SC-DevTeam/Pinocchio/blob/master/src/com/scdevteam/crypto/rc4/RC4.java
  */
 
-#include "../../../include/rc4.hpp"
+#include "../../../include/proxy/crypto/rc4/rc4.hpp"
 
 #include <cstdlib>
 

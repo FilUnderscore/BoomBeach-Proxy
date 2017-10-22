@@ -8,11 +8,11 @@
 #ifndef INCLUDE_BASECRYPTO_HPP_
 #define INCLUDE_BASECRYPTO_HPP_
 
-#include "byte_array.hpp"
+#include "../../util/byte_array.hpp"
 #include "nonce.hpp"
-#include "message.hpp"
+#include "../../message/message.hpp"
 
-#include "../proxy/crypto/tweetnacl/tweetnacl.h"
+#include "../../../../proxy/crypto/tweetnacl/tweetnacl.h"
 
 class basecrypto
 {

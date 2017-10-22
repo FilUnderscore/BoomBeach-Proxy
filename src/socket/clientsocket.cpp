@@ -5,8 +5,8 @@
  *      Author: Filip Jerkovic
  */
 
-#include "../include/clientsocket.hpp"
-#include "../include/logger.hpp"
+#include "../include/socket/clientsocket.hpp"
+#include "../include/logger/logger.hpp"
 
 clientsocket::clientsocket()
 {
