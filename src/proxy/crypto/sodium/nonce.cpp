@@ -48,15 +48,15 @@ nonce::nonce(byte_array clientKey, byte_array serverKey, byte_array nonce)
 
 void nonce::increment()
 {
-	byte_array array(byte::INT16_LENGTH);
+	byte_array array(bytes::INT16_LENGTH);
 
 	memcpy(array.buffer, this->bytes.buffer, array.len);
 
-	short s = byte::toInt16(array);
+	short s = bytes::toInt16(array);
 
 	s += 2;
 
-	byte_array shortBuffer = byte::fromInt16(s);
+	byte_array shortBuffer = bytes::fromInt16(s);
 
 	this->bytes.buffer[0] = shortBuffer.buffer[0];
 	this->bytes.buffer[1] = shortBuffer.buffer[1];

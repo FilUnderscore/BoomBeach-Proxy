@@ -10,7 +10,11 @@
 
 #include "clientsocket.hpp"
 
+#ifndef __WIN32__
 #include <thread>
+#else
+#include <windows.h>
+#endif
 
 using namespace std;
 
@@ -41,11 +45,16 @@ protected:
 	 */
 	clientsocket gameSocket;
 
+#ifndef __WIN32__
 	thread* clientRequestThread;
 	thread* clientResponseThread;
+#else
+	DWORD clientRequestThread;
+	DWORD clientResponseThread;
+#endif
 
-	static void runRequest(client instance);
-	static void runResponse(client instance);
+	void runRequest();
+	void runResponse();
 };
 
 #endif /* PROXY_NETWORK_CLIENT_HPP_ */

@@ -17,7 +17,6 @@ int main(int argc, char** argv)
 
 	//Log to file, uncomment.
 	//logger::file("proxy.log");
-
 	proxy::init(proxy::DEFAULT_HOST, proxy::DEFAULT_PORT);
 
 	return 0;

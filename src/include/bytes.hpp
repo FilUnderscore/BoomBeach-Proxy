@@ -1,12 +1,12 @@
 /*
- * byte.hpp
+ * bytes.hpp
  *
  *  Created on: 21/10/2017
  *      Author: Filip Jerkovic
  */
 
-#ifndef INCLUDE_BYTE_HPP_
-#define INCLUDE_BYTE_HPP_
+#ifndef INCLUDE_BYTES_HPP_
+#define INCLUDE_BYTES_HPP_
 
 #include <iostream>
 #include <string>
@@ -17,7 +17,7 @@ using namespace std;
 #include "byte_array.hpp"
 #include "rrsint32.hpp"
 
-class byte
+class bytes
 {
 public:
 	static const int INT16_LENGTH = 2;
@@ -60,4 +60,4 @@ public:
 private:
 	static int charToInt(char c);
 };
-#endif /* INCLUDE_BYTE_HPP_ */
+#endif /* INCLUDE_BYTES_HPP_ */

@@ -8,7 +8,7 @@
 #include "../../include/console.hpp"
 #include "../../include/proxy.hpp"
 
-
+#ifndef __WIN32__
 console::console()
 {
 	this->consoleThread = new thread(init);
@@ -17,8 +17,9 @@ console::console()
 
 console::~console()
 {
-	this->consoleThread->~thread();
+	this->consoleThread->~compatthread();
 }
+#endif
 
 void console::init()
 {

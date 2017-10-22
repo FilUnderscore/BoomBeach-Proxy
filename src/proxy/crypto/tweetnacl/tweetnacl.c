@@ -26,6 +26,10 @@ typedef unsigned long long u64;
 typedef long long i64;
 typedef i64 gf[16];
 
+#ifdef __WIN32__
+#include <Wincrypt.h>
+#endif
+
 void randombytes(u8 * ptr, u64 length)
 {
 	//TODO: Implement from sodium

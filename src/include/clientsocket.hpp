@@ -11,8 +11,6 @@
 #include <string>
 #include <strings.h>
 
-#include <arpa/inet.h>
-
 #include <unistd.h>
 
 #include <cstring>
@@ -25,6 +23,7 @@
 #include <netdb.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <arpa/inet.h>
 #else
 //TODO: Implement Winsock2
 #endif

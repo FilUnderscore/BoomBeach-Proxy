@@ -59,7 +59,7 @@ void serversocket::initialize()
 	this->socketId = serverSocketId;
 #else
 	//TODO: Implement Winsock2
-	throw "Windows support not implemented!";
+	throw std::runtime_error("Windows support not implemented!");
 #endif
 }
 

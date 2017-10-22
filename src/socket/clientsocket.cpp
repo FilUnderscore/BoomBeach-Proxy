@@ -28,6 +28,7 @@ clientsocket::~clientsocket()
 
 void clientsocket::connectTo(string host, int port)
 {
+#ifndef __WIN32__
 	int clientSocketId;
 
 	struct sockaddr_in serv_addr;
@@ -62,6 +63,9 @@ void clientsocket::connectTo(string host, int port)
 
 	this->socketId = clientSocketId;
 	this->conn = true;
+#else
+	throw std::runtime_error("Windows support not implemented.");
+#endif
 }
 
 bool clientsocket::connected()
@@ -99,7 +103,11 @@ int clientsocket::available()
 {
 	int bytesAvailable;
 
+#ifndef __WIN32__
 	ioctl(this->socketId, FIONREAD, &bytesAvailable);
+#else
+
+#endif
 
 	return bytesAvailable;
 }

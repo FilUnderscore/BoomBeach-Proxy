@@ -18,11 +18,15 @@ client::client(clientsocket socket) : client()
 	this->socket = socket;
 	this->gameSocket = *new clientsocket(proxy::getProxy().getHost(), proxy::getProxy().getPort());
 
-	this->clientRequestThread = new thread(runRequest, *this);
+#ifndef __WIN32__
+	this->clientRequestThread = new thread(runRequest);
 	this->clientRequestThread->detach();
 
-	this->clientResponseThread = new thread(runResponse, *this);
+	this->clientResponseThread = new thread(runResponse);
 	this->clientResponseThread->detach();
+#else
+
+#endif
 }
 
 client::~client()
@@ -35,12 +39,16 @@ void client::disconnect()
 	this->socket.disconnect();
 	this->gameSocket.disconnect();
 
+#ifndef __WIN32__
 	//TODO: Deconstructors called during thread execution?
-	this->clientRequestThread->~thread();
-	this->clientResponseThread->~thread();
+	this->clientRequestThread->~compatthread();
+	this->clientResponseThread->~compatthread();
+#else
+
+#endif
 }
 
-void client::runRequest(client instance)
+void client::runRequest()
 {
 	logger::log("Starting client request thread.");
 
@@ -53,7 +61,7 @@ void client::runRequest(client instance)
 
 	while(true)
 	{
-		clientAvailable = instance.getSocket().available();
+		clientAvailable = this->getSocket().available();
 
 		if(clientAvailable == -1)
 		{
@@ -66,7 +74,7 @@ void client::runRequest(client instance)
 			{
 				clientHeaderSet = true;
 
-				instance.getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				this->getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
 				clientPayload.len = messageheader::HEADER_LENGTH;
 
 				clientAvailable -= messageheader::HEADER_LENGTH;
@@ -83,7 +91,7 @@ void client::runRequest(client instance)
 			{
 				clientHeaderSet = false;
 
-				instance.getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
+				this->getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
 
 				byte_array message(messageheader::HEADER_LENGTH + clientHeader.getPayloadLength());
 
@@ -95,16 +103,16 @@ void client::runRequest(client instance)
 
 				memcpy(message.buffer + 7, clientPayload.buffer, clientHeader.getPayloadLength());
 
-				logger::log("[CLIENT] Payload [HEX]: " + byte::toHexString(clientPayload));
+				logger::log("[CLIENT] Payload [HEX]: " + bytes::toHexString(clientPayload));
 				logger::log("");
 
-				instance.getGameSocket().writeBuffer(message.buffer, 0, message.len);
+				this->getGameSocket().writeBuffer(message.buffer, 0, message.len);
 			}
 		}
 	}
 }
 
-void client::runResponse(client instance)
+void client::runResponse()
 {
 	logger::log("Starting client response thread.");
 
@@ -117,7 +125,7 @@ void client::runResponse(client instance)
 
 	while(true)
 	{
-		serverAvailable = instance.getGameSocket().available();
+		serverAvailable = this->getGameSocket().available();
 
 		if(serverAvailable == -1)
 		{
@@ -130,7 +138,7 @@ void client::runResponse(client instance)
 			{
 				serverHeaderSet = true;
 
-				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				this->getGameSocket().readBuffer(serverPayload.buffer, 0, messageheader::HEADER_LENGTH);
 				serverPayload.len = messageheader::HEADER_LENGTH;
 
 				serverAvailable -= messageheader::HEADER_LENGTH;
@@ -149,7 +157,7 @@ void client::runResponse(client instance)
 			{
 				serverHeaderSet = false;
 
-				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
+				this->getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
 
 				byte_array message(messageheader::HEADER_LENGTH + serverHeader.getPayloadLength());
 
@@ -161,10 +169,10 @@ void client::runResponse(client instance)
 
 				memcpy(message.buffer + 7, serverPayload.buffer, serverHeader.getPayloadLength());
 
-				logger::log("[SERVER] Payload [HEX]: " + byte::toHexString(serverPayload));
+				logger::log("[SERVER] Payload [HEX]: " + bytes::toHexString(serverPayload));
 				logger::log("");
 
-				instance.getSocket().writeBuffer(message.buffer, 0, message.len);
+				this->getSocket().writeBuffer(message.buffer, 0, message.len);
 			}
 		}
 	}
