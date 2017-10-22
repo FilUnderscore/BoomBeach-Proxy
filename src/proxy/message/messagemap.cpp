@@ -6,6 +6,7 @@
  */
 
 #include "../../include/messagemap.hpp"
+#include <strings.h>
 
 bool messagemap::initialized = false;
 map<short, string> messagemap::messages;
@@ -22,6 +23,21 @@ string messagemap::getName(short id)
 	{
 		return messages.at(-1);
 	}
+}
+
+int messagemap::getId(string name)
+{
+	initialize();
+
+	for(map<short, string>::iterator it = messages.begin(); it != messages.end(); it++)
+	{
+		if(strcasecmp(it->second.c_str(), name.c_str()) == 0)
+		{
+			return it->first;
+		}
+	}
+
+	return -1;
 }
 
 void messagemap::initialize()

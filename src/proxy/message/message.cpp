@@ -17,22 +17,22 @@ messageheader message::getHeader()
 	return this->header;
 }
 
-void message::setEncryptedPayload(char* encrypted)
+void message::setEncryptedPayload(byte_array encrypted)
 {
 	this->encryptedPayload = encrypted;
 }
 
-void message::setDecryptedPayload(char* decrypted)
+void message::setDecryptedPayload(byte_array decrypted)
 {
 	this->decryptedPayload = decrypted;
 }
 
-char* message::getEncryptedPayload()
+byte_array message::getEncryptedPayload()
 {
 	return this->encryptedPayload;
 }
 
-char* message::getDecryptedPayload()
+byte_array message::getDecryptedPayload()
 {
 	return this->decryptedPayload;
 }

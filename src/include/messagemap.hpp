@@ -20,6 +20,8 @@ public:
 
 	static string getName(short id);
 
+	static int getId(string name);
+
 private:
 	static bool initialized;
 

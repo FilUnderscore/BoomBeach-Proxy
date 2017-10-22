@@ -44,7 +44,7 @@ void client::runRequest(client instance)
 {
 	logger::log("Starting client request thread.");
 
-	unsigned char clientData[READ_BYTES];
+	byte_array clientPayload(READ_BYTES);
 
 	int clientAvailable = 0;
 
@@ -53,13 +53,11 @@ void client::runRequest(client instance)
 
 	while(true)
 	{
-		//Client - Receive
-
 		clientAvailable = instance.getSocket().available();
 
 		if(clientAvailable == -1)
 		{
-			//EOF sent from client.
+			//EOF from client.
 			break;
 		}
 		else if(clientAvailable >= 0)
@@ -68,12 +66,12 @@ void client::runRequest(client instance)
 			{
 				clientHeaderSet = true;
 
-				instance.getSocket().readBuffer(clientData, 0, messageheader::HEADER_LENGTH);
+				instance.getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				clientPayload.len = messageheader::HEADER_LENGTH;
+
 				clientAvailable -= messageheader::HEADER_LENGTH;
 
-				clientHeader = messageheader::parse(clientData);
-
-				logger::log("[CLIENT] HEADER: " + byte::toHexString(clientData, 7));
+				clientHeader = messageheader::parse(clientPayload);
 
 				logger::log("[CLIENT] " + messagemap::getName(clientHeader.getId()));
 				logger::log("[CLIENT] ID: " + to_string(clientHeader.getId()));
@@ -85,23 +83,22 @@ void client::runRequest(client instance)
 			{
 				clientHeaderSet = false;
 
-				instance.getSocket().readBuffer(clientData, 0, clientHeader.getPayloadLength());
+				instance.getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
 
-				int messageLength = messageheader::HEADER_LENGTH + clientHeader.getPayloadLength();
-				unsigned char message[messageLength];
+				byte_array message(messageheader::HEADER_LENGTH + clientHeader.getPayloadLength());
 
-				unsigned char* headerArray = clientHeader.array();
+				byte_array header = clientHeader.array();
 
-				memcpy(message, headerArray, messageheader::HEADER_LENGTH);
+				memcpy(message.buffer, header.buffer, messageheader::HEADER_LENGTH);
 
-				free(headerArray);
+				free(header.buffer);
 
-				memcpy(message + 7, clientData, clientHeader.getPayloadLength());
+				memcpy(message.buffer + 7, clientPayload.buffer, clientHeader.getPayloadLength());
 
-				logger::log("[CLIENT] Payload: " + byte::toHexString(message, messageLength));
+				logger::log("[SERVER] Payload: " + byte::toHexString(clientPayload));
 				logger::log("");
 
-				instance.getGameSocket().writeBuffer(message, 0, messageLength);
+				instance.getGameSocket().writeBuffer(message.buffer, 0, message.len);
 			}
 		}
 	}
@@ -111,7 +108,7 @@ void client::runResponse(client instance)
 {
 	logger::log("Starting client response thread.");
 
-	unsigned char serverData[READ_BYTES];
+	byte_array serverPayload(READ_BYTES);
 
 	int serverAvailable = 0;
 
@@ -133,12 +130,14 @@ void client::runResponse(client instance)
 			{
 				serverHeaderSet = true;
 
-				instance.getGameSocket().readBuffer(serverData, 0, messageheader::HEADER_LENGTH);
+				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				serverPayload.len = messageheader::HEADER_LENGTH;
+
 				serverAvailable -= messageheader::HEADER_LENGTH;
 
-				serverHeader = messageheader::parse(serverData);
+				serverHeader = messageheader::parse(serverPayload);
 
-				logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
+				//logger::log("[SERVER] HEADER: " + byte::toHexString(serverData, 7));
 
 				logger::log("[SERVER] " + messagemap::getName(serverHeader.getId()));
 				logger::log("[SERVER] ID: " + to_string(serverHeader.getId()));
@@ -150,23 +149,22 @@ void client::runResponse(client instance)
 			{
 				serverHeaderSet = false;
 
-				instance.getGameSocket().readBuffer(serverData, 0, serverHeader.getPayloadLength());
+				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
 
-				int messageLength = messageheader::HEADER_LENGTH + serverHeader.getPayloadLength();
-				unsigned char message[messageLength];
+				byte_array message(messageheader::HEADER_LENGTH + serverHeader.getPayloadLength());
 
-				unsigned char* headerArray = serverHeader.array();
+				byte_array header = serverHeader.array();
 
-				memcpy(message, headerArray, messageheader::HEADER_LENGTH);
+				memcpy(message.buffer, header.buffer, messageheader::HEADER_LENGTH);
 
-				free(headerArray);
+				free(header.buffer);
 
-				memcpy(message + 7, serverData, serverHeader.getPayloadLength());
+				memcpy(message.buffer + 7, serverPayload.buffer, serverHeader.getPayloadLength());
 
-				logger::log("[SERVER] Payload: " + byte::toHexString(message, messageLength));
+				logger::log("[SERVER] Payload: " + byte::toHexString(serverPayload));
 				logger::log("");
 
-				instance.getSocket().writeBuffer(message, 0, messageLength);
+				instance.getSocket().writeBuffer(message.buffer, 0, message.len);
 			}
 		}
 	}

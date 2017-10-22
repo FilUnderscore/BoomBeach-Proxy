@@ -13,18 +13,18 @@
 class nonce
 {
 private:
-	unsigned char* bytes;
+	byte_array bytes;
 	int bytes_len;
 
 public:
 	nonce();
-	nonce(unsigned char* nc, int nonce_len);
-	nonce(unsigned char* clientKey, int client_key_len, unsigned char* serverKey, int server_key_len);
-	nonce(unsigned char* clientKey, int client_key_len, unsigned char* serverKey, int server_key_len, unsigned char* nc, int nonce_len);
+	nonce(byte_array nonce);
+	nonce(byte_array clientKey, byte_array serverKey);
+	nonce(byte_array clientKey, byte_array serverKey, byte_array nonce);
 
 	void increment();
 
-	unsigned char* getBytes();
+	byte_array getBytes();
 };
 
 #endif /* INCLUDE_NONCE_HPP_ */

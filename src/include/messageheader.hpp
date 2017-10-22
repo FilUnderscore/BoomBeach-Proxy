@@ -23,9 +23,9 @@ public:
 	int getPayloadLength();
 	short getVersion();
 
-	static messageheader parse(unsigned char* buffer);
+	static messageheader parse(byte_array array);
 
-	unsigned char* array();
+	byte_array array();
 protected:
 	short messageId;
 	int payloadLen;

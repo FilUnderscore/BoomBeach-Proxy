@@ -38,40 +38,40 @@ short messageheader::getVersion()
 	return this->messageVersion;
 }
 
-messageheader messageheader::parse(unsigned char* buffer)
+messageheader messageheader::parse(byte_array array)
 {
 	messageheader header;
 
-	unsigned char messageIdBuffer[byte::INT16_LENGTH];
-	memcpy(messageIdBuffer, buffer, byte::INT16_LENGTH);
-	header.messageId = byte::toInt16(messageIdBuffer);
+	byte_array messageIdArray(byte::INT16_LENGTH);
+	memcpy(messageIdArray.buffer, array.buffer, byte::INT16_LENGTH);
+	header.messageId = byte::toInt16(messageIdArray);
 
-	unsigned char payloadLenBuffer[byte::INT24_LENGTH];
-	memcpy(payloadLenBuffer + 1, buffer + 2, byte::INT24_LENGTH);
-	header.payloadLen = byte::toInt24(payloadLenBuffer);
+	byte_array payloadLenArray(byte::INT24_LENGTH);
+	memcpy(payloadLenArray.buffer, array.buffer + 2, byte::INT24_LENGTH);
+	header.payloadLen = byte::toInt24(payloadLenArray);
 
-	unsigned char messageVersionBuffer[byte::INT16_LENGTH];
-	memcpy(messageVersionBuffer, buffer + 5, byte::INT16_LENGTH);
-	header.messageVersion = byte::toInt16(messageVersionBuffer);
+	byte_array messageVersionArray(byte::INT16_LENGTH);
+	memcpy(messageVersionArray.buffer, array.buffer + 5, byte::INT16_LENGTH);
+	header.messageVersion = byte::toInt16(messageVersionArray);
 
 	return header;
 }
 
-unsigned char* messageheader::array()
+byte_array messageheader::array()
 {
-	unsigned char* buffer = (unsigned char*)malloc(HEADER_LENGTH);
+	byte_array array(HEADER_LENGTH);
 
-	unsigned char* messageIdBuffer = byte::fromInt16(messageId);
-	memcpy(buffer, messageIdBuffer, byte::INT16_LENGTH);
-	free(messageIdBuffer);
+	byte_array messageIdArray = byte::fromInt16(messageId);
+	memcpy(array.buffer, messageIdArray.buffer, messageIdArray.len);
+	free(messageIdArray.buffer);
 
-	unsigned char* payloadLenBuffer = byte::fromInt24(payloadLen);
-	memcpy(buffer + 2, byte::fromInt24(payloadLen) + 1, byte::INT24_LENGTH);
-	free(payloadLenBuffer);
+	byte_array payloadLenArray = byte::fromInt24(payloadLen);
+	memcpy(array.buffer + 2, payloadLenArray.buffer, payloadLenArray.len);
+	free(payloadLenArray.buffer);
 
-	unsigned char* messageVersionBuffer = byte::fromInt16(messageVersion);
-	memcpy(buffer + 5, byte::fromInt16(messageVersion), byte::INT16_LENGTH);
-	free(messageVersionBuffer);
+	byte_array messageVersionArray = byte::fromInt16(messageVersion);
+	memcpy(array.buffer + 5, messageVersionArray.buffer, messageVersionArray.len);
+	free(messageVersionArray.buffer);
 
-	return buffer;
+	return array;
 }

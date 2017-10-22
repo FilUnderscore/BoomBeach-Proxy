@@ -10,9 +10,11 @@
 
 #include <iostream>
 #include <string>
+#include <string.h>
 
 using namespace std;
 
+#include "byte_array.hpp"
 #include "rrsint32.hpp"
 
 class byte
@@ -23,37 +25,37 @@ public:
 	static const int INT32_LENGTH = 4;
 	static const int INT64_LENGTH = 8;
 
-	//TO CHAR* FROM TYPE
+	//TO byte[] FROM TYPE
 
-	static unsigned char* fromInt16(short s);
+	static byte_array fromInt16(short s);
 
-	static unsigned char* fromInt24(int i);
+	static byte_array fromInt24(int i);
 
-	static unsigned char* fromInt32(int i);
+	static byte_array fromInt32(int i);
 
-	static unsigned char* fromInt64(long l);
+	static byte_array fromInt64(long l);
 
-	static unsigned char* fromRrsInt32(rrsint32 r);
+	static byte_array fromRrsInt32(rrsint32 r);
 
-	static unsigned char* fromString(string s);
+	static byte_array fromString(string s);
 
-	static unsigned char* fromHexString(string s);
+	static byte_array fromHexString(string s);
 
 	//FROM CHAR* TO TYPE
 
-	static short toInt16(unsigned char* buffer);
+	static short toInt16(byte_array buffer);
 
-	static int toInt24(unsigned char* buffer);
+	static int toInt24(byte_array buffer);
 
-	static int toInt32(unsigned char* buffer);
+	static int toInt32(byte_array buffer);
 
-	static long toInt64(unsigned char* buffer);
+	static long toInt64(byte_array buffer);
 
-	static rrsint32 toRrsInt32(unsigned char* buffer);
+	static rrsint32 toRrsInt32(byte_array buffer);
 
-	static string toString(unsigned char* buffer);
+	static string toString(byte_array buffer);
 
-	static string toHexString(unsigned char* buffer, int buffersize);
+	static string toHexString(byte_array buffer);
 
 private:
 	static int charToInt(char c);

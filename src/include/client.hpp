@@ -9,6 +9,7 @@
 #define PROXY_NETWORK_CLIENT_HPP_
 
 #include "clientsocket.hpp"
+
 #include <thread>
 
 using namespace std;

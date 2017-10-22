@@ -13,16 +13,15 @@
 
 nonce::nonce()
 {
-	this->bytes = (unsigned char*) malloc(24);
+	this->bytes = *new byte_array(24);
 }
 
-nonce::nonce(unsigned char* nc, int nonce_len)
+nonce::nonce(byte_array nonce)
 {
-	this->bytes = nc;
-	this->bytes_len = nonce_len;
+	this->bytes = nonce;
 }
 
-nonce::nonce(unsigned char* clientKey, int client_key_len, unsigned char* serverKey, int server_key_len) : nonce(clientKey, client_key_len, serverKey, server_key_len, NULL, 0)
+nonce::nonce(byte_array clientKey, byte_array serverKey) : nonce(clientKey, serverKey, *new byte_array())
 {}
 
 extern "C"
@@ -30,41 +29,42 @@ extern "C"
 	#include "../blake2/blake2b.h"
 }
 
-nonce::nonce(unsigned char* clientKey, int client_key_len, unsigned char* serverKey, int server_key_len, unsigned char* nc, int nonce_len)
+nonce::nonce(byte_array clientKey, byte_array serverKey, byte_array nonce)
 {
 	blake2b_ctx ctx;
 
 	if(blake2b_init(&ctx, 24, NULL, 0))
 		throw std::runtime_error("Failed to initialize blake2b.");
 
-	if(nc != NULL)
-		blake2b_update(&ctx, nc, nonce_len);
+	if(nonce.len > 0)
+		blake2b_update(&ctx, nonce.buffer, nonce.len);
 
-	blake2b_update(&ctx, clientKey, client_key_len);
-	blake2b_update(&ctx, serverKey, server_key_len);
+	blake2b_update(&ctx, clientKey.buffer, clientKey.len);
+	blake2b_update(&ctx, serverKey.buffer, serverKey.len);
 
-	blake2b_final(&ctx, this->bytes);
+	blake2b_final(&ctx, this->bytes.buffer);
 	this->bytes_len = 24;
 }
 
 void nonce::increment()
 {
-	unsigned char buffer[byte::INT16_LENGTH];
-	memcpy(buffer, this->bytes, byte::INT16_LENGTH);
+	byte_array array(byte::INT16_LENGTH);
 
-	short s = byte::toInt16(buffer);
+	memcpy(array.buffer, this->bytes.buffer, array.len);
+
+	short s = byte::toInt16(array);
 
 	s += 2;
 
-	unsigned char* shortBuffer = byte::fromInt16(s);
+	byte_array shortBuffer = byte::fromInt16(s);
 
-	this->bytes[0] = shortBuffer[0];
-	this->bytes[1] = shortBuffer[1];
+	this->bytes.buffer[0] = shortBuffer.buffer[0];
+	this->bytes.buffer[1] = shortBuffer.buffer[1];
 
-	free(shortBuffer);
+	free(shortBuffer.buffer);
 }
 
-unsigned char* nonce::getBytes()
+byte_array nonce::getBytes()
 {
 	return this->bytes;
 }

@@ -8,6 +8,7 @@
 #ifndef INCLUDE_BASECRYPTO_HPP_
 #define INCLUDE_BASECRYPTO_HPP_
 
+#include "byte_array.hpp"
 #include "nonce.hpp"
 #include "message.hpp"
 
@@ -16,12 +17,12 @@
 class basecrypto
 {
 public:
-	unsigned char* encrypt(unsigned char* message, int message_len)
+	byte_array encrypt(byte_array message)
 	{
-		return this->encrypt(message, message_len, NULL);
+		return this->encrypt(message, NULL);
 	}
 
-	unsigned char* encrypt(unsigned char* message, int message_len, nonce* nonce)
+	byte_array encrypt(byte_array message, nonce* nonce)
 	{
 		if(nonce == NULL)
 		{
@@ -29,19 +30,19 @@ public:
 			nonce = &encryptNonce;
 		}
 
-		unsigned char* cipher;
+		byte_array ciphertext(message.len);
 
-		crypto_box_afternm(cipher, message, message_len, nonce->getBytes(), sharedKey);
+		crypto_box_afternm(ciphertext.buffer, message.buffer, message.len, nonce->getBytes().buffer, sharedKey.buffer);
 
-		return cipher;
+		return ciphertext;
 	}
 
-	unsigned char* decrypt(unsigned char* ciphertext, int ciphertext_len)
+	byte_array decrypt(byte_array ciphertext)
 	{
-		return this->decrypt(ciphertext, ciphertext_len, NULL);
+		return this->decrypt(ciphertext, NULL);
 	}
 
-	unsigned char* decrypt(unsigned char* ciphertext, int ciphertext_len, nonce* nonce)
+	byte_array decrypt(byte_array ciphertext, nonce* nonce)
 	{
 		if(nonce == NULL)
 		{
@@ -49,9 +50,9 @@ public:
 			nonce = &decryptNonce;
 		}
 
-		unsigned char* message;
+		byte_array message(ciphertext.len);
 
-		crypto_box_open_afternm(message, ciphertext, ciphertext_len, nonce->getBytes(), sharedKey);
+		crypto_box_open_afternm(message.buffer, ciphertext.buffer, ciphertext.len, nonce->getBytes().buffer, sharedKey.buffer);
 
 		return message;
 	}
@@ -60,20 +61,20 @@ public:
 	virtual void encryptPacket(message message);
 
 protected:
-	unsigned char* privateKey;
-	unsigned char* serverKey;
-	unsigned char* clientKey;
-	unsigned char* sharedKey;
+	byte_array privateKey;
+	byte_array serverKey;
+	byte_array clientKey;
+	byte_array sharedKey;
 
 	nonce decryptNonce;
 	nonce encryptNonce;
 
-	unsigned char* sessionKey;
+	byte_array sessionKey;
 
 	/**
 	 * For new encryption
 	 */
-	unsigned char* magicKey;
+	byte_array magicKey;
 };
 
 #endif /* INCLUDE_BASECRYPTO_HPP_ */
