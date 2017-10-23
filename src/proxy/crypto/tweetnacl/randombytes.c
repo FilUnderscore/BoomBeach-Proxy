@@ -1,5 +1,6 @@
-#ifdef WIN32
-#include "Windows.h"
+#ifdef __WIN32__
+#include <Windows.h>
+#include <Wincrypt.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>

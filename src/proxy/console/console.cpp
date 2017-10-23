@@ -19,6 +19,16 @@ console::~console()
 {
 	this->consoleThread->~thread();
 }
+#else
+console::console()
+{
+	CreateThread(NULL, 0, console::initConsole, (void*)this, 0, consoleThread);
+}
+
+console::~console()
+{
+
+}
 #endif
 
 void console::init()
@@ -39,3 +49,12 @@ void console::init()
 		}
 	}
 }
+
+#ifdef __WIN32__
+DWORD WINAPI console::initConsole(LPVOID lpParam)
+{
+	console* instance = (console*)lpParam;
+
+	instance->init();
+}
+#endif

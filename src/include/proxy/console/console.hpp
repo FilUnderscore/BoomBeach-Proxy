@@ -19,32 +19,15 @@ using namespace std;
 class console
 {
 public:
-#ifndef __WIN32__
 	console();
 	~console();
-#else
-	console()
-	{
-		HANDLE handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)initConsole, this, 0, this->consoleThread);
-	}
-
-	~console()
-	{
-
-	}
-#endif
 
 protected:
 	static void init();
 #ifdef __WIN32__
 	PDWORD consoleThread;
 
-	static DWORD WINAPI initConsole(LPVOID lpParam)
-	{
-		console* instance = (console*)lpParam;
-
-		instance->init();
-	}
+	static DWORD WINAPI initConsole(LPVOID lpParam);
 #else
 	thread* consoleThread;
 #endif
