@@ -8,28 +8,24 @@
 #include "../../include/proxy/console/console.hpp"
 #include "../../include/proxy/proxy.hpp"
 
-#ifndef __WIN32__
 console::console()
 {
+#ifndef __WIN32__
 	this->consoleThread = new thread(init);
 	this->consoleThread->detach();
-}
-
-console::~console()
-{
-	this->consoleThread->~thread();
-}
 #else
-console::console()
-{
-	CreateThread(NULL, 0, console::initConsole, (void*)this, 0, consoleThread);
+	consoleThread = CreateThread(NULL, 0, console::initConsole, (void*)this, 0, &consoleThreadId);
+#endif
 }
 
 console::~console()
 {
-
-}
+#ifndef __WIN32__
+	this->consoleThread->~thread();
+#else
+	TerminateThread(consoleThread, 0);
 #endif
+}
 
 void console::init()
 {

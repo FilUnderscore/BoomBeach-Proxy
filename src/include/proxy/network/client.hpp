@@ -49,8 +49,14 @@ protected:
 	thread* clientRequestThread;
 	thread* clientResponseThread;
 #else
-	PDWORD clientRequestThread;
-	PDWORD clientResponseThread;
+	DWORD clientRequestThreadId;
+	DWORD clientResponseThreadId;
+
+	HANDLE clientRequestThread;
+	HANDLE clientResponseThread;
+
+	static DWORD WINAPI startRequest(LPVOID lpParam);
+	static DWORD WINAPI startResponse(LPVOID lpParam);
 #endif
 
 	/**

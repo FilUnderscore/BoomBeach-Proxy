@@ -27,7 +27,8 @@ client::client(clientsocket socket) : client()
 	this->clientResponseThread = new thread(runResponse, *this);
 	this->clientResponseThread->detach();
 #else
-
+	clientRequestThread = CreateThread(NULL, 0, client::startRequest, (void*)this, 0, &clientRequestThreadId);
+	clientResponseThread = CreateThread(NULL, 0, client::startResponse, (void*)this, 0, &clientResponseThreadId);
 #endif
 }
 
@@ -46,7 +47,8 @@ void client::disconnect()
 	this->clientRequestThread->~thread();
 	this->clientResponseThread->~thread();
 #else
-
+	TerminateThread(this->clientRequestThread, 0);
+	TerminateThread(this->clientResponseThread, 0);
 #endif
 }
 
@@ -167,6 +169,20 @@ void client::runResponse(client instance)
 		}
 	}
 }
+
+#ifdef __WIN32__
+	DWORD WINAPI client::startRequest(LPVOID lpParam)
+	{
+		client* instance = (client*) lpParam;
+		client::runRequest(*instance);
+	}
+
+	DWORD WINAPI client::startResponse(LPVOID lpParam)
+	{
+		client* instance = (client*) lpParam;
+		client::runResponse(*instance);
+	}
+#endif
 
 clientsocket client::getSocket()
 {

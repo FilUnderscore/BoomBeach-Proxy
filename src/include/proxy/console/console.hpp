@@ -25,7 +25,9 @@ public:
 protected:
 	static void init();
 #ifdef __WIN32__
-	PDWORD consoleThread;
+	DWORD consoleThreadId;
+
+	HANDLE consoleThread;
 
 	static DWORD WINAPI initConsole(LPVOID lpParam);
 #else
