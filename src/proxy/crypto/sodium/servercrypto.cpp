@@ -44,7 +44,7 @@ void servercrypto::decryptPacket(message message)
 	{
 		clientKey = *new byte_array(32);
 
-		memcpy(clientKey.buffer, message.getEncryptedPayload().buffer, 32);
+		memcpy(clientKey.buffer, message.getEncryptedPayload().buffer, KEY_LENGTH);
 
 		if(magicKey.len != 0)
 		{
@@ -52,7 +52,7 @@ void servercrypto::decryptPacket(message message)
 		}
 		else
 		{
-			sharedKey = *new byte_array(32);
+			sharedKey = *new byte_array(KEY_LENGTH);
 
 			crypto_box_beforenm(sharedKey.buffer, clientKey.buffer, privateKey.buffer);
 		}
@@ -60,13 +60,28 @@ void servercrypto::decryptPacket(message message)
 		nonce* nc = new nonce(clientKey, serverKey);
 
 		byte_array payload(message.getEncryptedPayload().len);
-		memcpy(payload.buffer, message.getEncryptedPayload().buffer + 32, message.getEncryptedPayload().len);
+		memcpy(payload.buffer, message.getEncryptedPayload().buffer + KEY_LENGTH, message.getEncryptedPayload().len);
 
 		byte_array deciphered = decrypt(payload, nc);
+
+		byte_array sessionKeyArray(nonce::NONCE_LENGTH);
+		memcpy(sessionKeyArray.buffer, deciphered.buffer, nonce::NONCE_LENGTH);
+
+		byte_array decryptEncryptNonceArray(nonce::NONCE_LENGTH);
+		memcpy(decryptEncryptNonceArray.buffer, deciphered.buffer + nonce::NONCE_LENGTH, nonce::NONCE_LENGTH);
+
+		decryptNonce = *new nonce(decryptEncryptNonceArray);
+		//TODO: Client Crypto
+		//proxy.client.crypto.encryptNonce = new nonce(decryptEncryptNonceArray);
+
+		byte_array decryptedPayloadArray(deciphered.len - (nonce::NONCE_LENGTH * 2));
+		memcpy(decryptedPayloadArray.buffer, deciphered.buffer + (nonce::NONCE_LENGTH * 2), decryptedPayloadArray.len);
+
+		message.setDecryptedPayload(decryptedPayloadArray);
 	}
 	else
 	{
-
+		message.setDecryptedPayload(decrypt(message.getEncryptedPayload()));
 	}
 }
 

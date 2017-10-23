@@ -17,6 +17,8 @@
 class basecrypto
 {
 public:
+	static const int KEY_LENGTH = 32;
+
 	basecrypto();
 	~basecrypto();
 
