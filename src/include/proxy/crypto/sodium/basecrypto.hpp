@@ -17,6 +17,9 @@
 class basecrypto
 {
 public:
+	basecrypto();
+	~basecrypto();
+
 	byte_array encrypt(byte_array message)
 	{
 		return this->encrypt(message, NULL);
@@ -57,8 +60,8 @@ public:
 		return message;
 	}
 
-	virtual void decryptPacket(message message);
-	virtual void encryptPacket(message message);
+	void decryptPacket(message message);
+	void encryptPacket(message message);
 
 protected:
 	byte_array privateKey;

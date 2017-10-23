@@ -14,9 +14,10 @@ class nonce
 {
 private:
 	byte_array bytes;
-	int bytes_len;
 
 public:
+	static const int NONCE_LENGTH = 24;
+
 	nonce();
 	nonce(byte_array nonce);
 	nonce(byte_array clientKey, byte_array serverKey);

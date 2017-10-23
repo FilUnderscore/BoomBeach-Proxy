@@ -13,7 +13,7 @@
 
 nonce::nonce()
 {
-	this->bytes = *new byte_array(24);
+	this->bytes = *new byte_array(NONCE_LENGTH);
 }
 
 nonce::nonce(byte_array nonce)
@@ -29,11 +29,11 @@ extern "C"
 	#include "../blake2/blake2b.h"
 }
 
-nonce::nonce(byte_array clientKey, byte_array serverKey, byte_array nonce)
+nonce::nonce(byte_array clientKey, byte_array serverKey, byte_array nonce) : nonce::nonce()
 {
 	blake2b_ctx ctx;
 
-	if(blake2b_init(&ctx, 24, NULL, 0))
+	if(blake2b_init(&ctx, this->bytes.len, NULL, 0))
 		throw std::runtime_error("Failed to initialize blake2b.");
 
 	if(nonce.len > 0)
@@ -43,7 +43,6 @@ nonce::nonce(byte_array clientKey, byte_array serverKey, byte_array nonce)
 	blake2b_update(&ctx, serverKey.buffer, serverKey.len);
 
 	blake2b_final(&ctx, this->bytes.buffer);
-	this->bytes_len = 24;
 }
 
 void nonce::increment()
