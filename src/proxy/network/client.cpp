@@ -17,6 +17,9 @@ client::client() {}
 
 client::client(clientsocket socket) : client()
 {
+	//TODO: Testing
+	messageHistory = new vector<message>;
+
 	this->socket = socket;
 	this->gameSocket = *new clientsocket(proxy::getProxy().getHost(), proxy::getProxy().getPort());
 
@@ -107,6 +110,9 @@ void client::runRequest(client instance)
 				logger::log("");
 
 				instance.getGameSocket().writeBuffer(message.buffer, 0, message.len);
+
+				//TODO: Testing
+				//instance.messageHistory->push_back(msg);
 			}
 		}
 	}
@@ -166,9 +172,18 @@ void client::runResponse(client instance)
 				logger::log("");
 
 				instance.getSocket().writeBuffer(message.buffer, 0, message.len);
+
+				//TODO: Testing
+				//instance.messageHistory->push_back(msg);
 			}
 		}
 	}
+}
+
+//TODO: Testing
+vector<message>* client::getMessageHistory()
+{
+	return messageHistory;
 }
 
 #ifdef __WIN32__

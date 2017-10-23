@@ -12,7 +12,7 @@
 network::network()
 {
 	this->running = false;
-	this->clients = *new vector<client>;
+	this->clients = new vector<client>;
 }
 
 network::~network()
@@ -24,18 +24,18 @@ network::~network()
 
 	clear();
 
-	this->clients.~vector();
+	this->clients->~vector();
 }
 
 void network::clear()
 {
-	for(int index = 0; index < this->clients.size(); index++)
+	for(int index = 0; index < this->clients->size(); index++)
 	{
-		this->clients.at(index).disconnect();
-		this->clients.at(index).~client();
+		this->clients->at(index).disconnect();
+		this->clients->at(index).~client();
 	}
 
-	this->clients.clear();
+	this->clients->clear();
 }
 
 void network::start()
@@ -59,7 +59,7 @@ void network::connection(clientsocket socket)
 {
 	client cli(socket);
 
-	this->clients.push_back(cli);
+	this->clients->push_back(cli);
 
 	logger::log("Client connected.");
 }
@@ -91,4 +91,9 @@ void network::disconnect(client cli, bool client)
 void network::stop()
 {
 
+}
+
+vector<client>* network::getClients()
+{
+	return clients;
 }

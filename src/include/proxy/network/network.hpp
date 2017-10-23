@@ -33,8 +33,10 @@ public:
 
 	void stop();
 
+	vector<client>* getClients();
+
 protected:
-	vector<client> clients;
+	vector<client>* clients;
 	serversocket* serverSocket;
 
 	bool running;

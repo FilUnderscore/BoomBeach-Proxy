@@ -8,6 +8,7 @@
 #ifndef PROXY_NETWORK_CLIENT_HPP_
 #define PROXY_NETWORK_CLIENT_HPP_
 
+#include "../message/message.hpp"
 #include "../../socket/clientsocket.hpp"
 
 #ifndef __WIN32__
@@ -15,6 +16,8 @@
 #else
 #include <windows.h>
 #endif
+
+#include <vector>
 
 using namespace std;
 
@@ -34,6 +37,8 @@ public:
 
 	void disconnect();
 
+	vector<message>* getMessageHistory();
+
 protected:
 	/**
 	 * Client/Device connection
@@ -44,6 +49,9 @@ protected:
 	 * Game Server Socket - connects to Boom Beach server.
 	 */
 	clientsocket gameSocket;
+
+	//TODO:
+	vector<message>* messageHistory;
 
 #ifndef __WIN32__
 	thread* clientRequestThread;

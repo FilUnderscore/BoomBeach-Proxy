@@ -41,6 +41,7 @@ void helpcommand::execute(vector<string> args)
 		text += cmd->getHelpText();
 
 		logger::log(text);
-		logger::log(""); //Newline (empty space)
 	}
+
+	logger::log(""); //Newline (empty space)
 }
