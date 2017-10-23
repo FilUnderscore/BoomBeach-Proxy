@@ -26,15 +26,15 @@ void dumpcommand::execute(vector<string> args)
 			{
 				client client = *cli;
 
-				vector<message>* messageHistory = client.getMessageHistory();
+				vector<message> messageHistory = client.getMessageHistory();
 
-				if(messageHistory->size() > 0)
+				if(messageHistory.size() > 0)
 				{
 					logger::log("<DUMP> Please select an index to dump.");
 
-					for(int mI = 0; mI < messageHistory->size(); mI++)
+					for(int mI = 0; mI < messageHistory.size(); mI++)
 					{
-						message msg = messageHistory->at(mI);
+						message msg = messageHistory.at(mI);
 
 						logger::log("<DUMP> " + to_string(mI) + " : " + to_string(msg.getHeader().getId()));
 					}

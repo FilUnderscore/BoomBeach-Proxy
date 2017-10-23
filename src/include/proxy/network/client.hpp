@@ -37,7 +37,7 @@ public:
 
 	void disconnect();
 
-	vector<message>* getMessageHistory();
+	vector<message> getMessageHistory();
 
 protected:
 	/**
@@ -51,7 +51,7 @@ protected:
 	clientsocket gameSocket;
 
 	//TODO:
-	vector<message>* messageHistory;
+	vector<message> messageHistory;
 
 #ifndef __WIN32__
 	thread* clientRequestThread;
