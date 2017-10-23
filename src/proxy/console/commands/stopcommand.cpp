@@ -8,7 +8,7 @@
 #include "../../../include/proxy/console/commands/stopcommand.hpp"
 #include "../../../include/proxy/proxy.hpp"
 
-void consolecommand::execute(vector<string> args)
+void stopcommand::execute(vector<string> args)
 {
 	logger::log("Stopping proxy... ");
 

@@ -11,11 +11,9 @@
 #include <algorithm>
 #include <cstring>
 
-vector<consolecommand*>* console::commands;
-
 console::console()
 {
-	commands = new vector<consolecommand*>();
+	registerCommands();
 
 #ifndef __WIN32__
 	this->consoleThread = new thread(init);
@@ -34,10 +32,24 @@ console::~console()
 #endif
 }
 
+vector<consolecommand*>* console::commands;
+
+//Commands
+#include "../../include/proxy/console/commands/helpcommand.hpp"
+#include "../../include/proxy/console/commands/stopcommand.hpp"
+#include "../../include/proxy/console/commands/dumpcommand.hpp"
+
+void console::registerCommands()
+{
+	commands = new vector<consolecommand*>();
+
+	commands->push_back(new helpcommand());
+	commands->push_back(new stopcommand());
+	commands->push_back(new dumpcommand());
+}
+
 void console::init()
 {
-	commands->push_back(new stopcommand());
-
 	string input;
 	while(true)
 	{
@@ -47,6 +59,8 @@ void console::init()
 		vector<string> args = *new vector<string>;
 
 		string cmdName = text[0];
+
+		bool found = false;
 
 		for(std::vector<string>::iterator s = text.begin() + 1; s < text.end(); s++)
 		{
@@ -64,17 +78,31 @@ void console::init()
 				std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 				std::transform(cmdName.begin(), cmdName.end(), cmdName.begin(), ::tolower);
 
-				if(msg == cmdName)
+				if(strcmp(msg.c_str(), cmdName.c_str()) == 0)
 				{
 					cmd->execute(args);
+					found = true;
+					goto exit;
 				}
 				else
 				{
-					logger::log("Console command \'" + input + "\' not found.");
+					found = false;
 				}
 			}
 		}
+
+		exit:
+			if(!found)
+			{
+				logger::log("Console command \'" + input + "\' not found. Type \'help\' for a list of commands.");
+			}
+			continue;
 	}
+}
+
+vector<consolecommand*>* console::getCommands()
+{
+	return commands;
 }
 
 #ifdef __WIN32__

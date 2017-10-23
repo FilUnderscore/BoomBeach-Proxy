@@ -11,8 +11,6 @@
 #include <vector>
 #include <string>
 
-#include "commands/stopcommand.hpp"
-
 #include "consolecommand.hpp"
 
 #ifndef __WIN32__
@@ -29,6 +27,8 @@ public:
 	console();
 	~console();
 
+	static vector<consolecommand*>* getCommands();
+
 protected:
 	static void init();
 
@@ -44,6 +44,8 @@ protected:
 
 private:
 	static vector<consolecommand*>* commands;
+
+	static void registerCommands();
 };
 
 #endif /* INCLUDE_CONSOLE_HPP_ */

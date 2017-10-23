@@ -16,28 +16,15 @@ using namespace std;
 class consolecommand
 {
 public:
-	consolecommand(string command, string helpText) : consolecommand(command, new vector<string>, helpText) {}
+	consolecommand();
+	consolecommand(string command, string helpText);
+	consolecommand(string command, vector<string>* aliases, string helpText);
 
-	consolecommand(string command, vector<string>* aliases, string helpText)
-	{
-		this->aliases = aliases;
+	~consolecommand();
 
-		this->aliases->insert(this->aliases->begin(), command);
+	virtual void execute(vector<string> arguments);
 
-		this->helpText = helpText;
-	}
-
-	~consolecommand()
-	{
-		this->aliases->~vector();
-	}
-
-	void execute(vector<string> arguments);
-
-	vector<string>* getAliases()
-	{
-		return aliases;
-	}
+	vector<string>* getAliases();
 
 protected:
 	vector<string>* aliases;

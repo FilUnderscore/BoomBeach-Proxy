@@ -13,7 +13,7 @@
 class dumpcommand : public consolecommand
 {
 public:
-	dumpcommand() : consolecommand("dump", "Dumps a packet from a list.");
+	dumpcommand() : consolecommand("dump", "Dumps a packet from a list.") {}
 };
 
 #endif /* INCLUDE_PROXY_CONSOLE_COMMANDS_DUMPCOMMAND_HPP_ */

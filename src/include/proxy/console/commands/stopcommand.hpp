@@ -15,6 +15,8 @@ class stopcommand : public consolecommand
 {
 public:
 	stopcommand() : consolecommand("stop", "Stops the Proxy...") {}
+
+	void execute(vector<string> args);
 };
 
 #endif /* INCLUDE_PROXY_CONSOLE_COMMANDS_STOPCOMMAND_HPP_ */
