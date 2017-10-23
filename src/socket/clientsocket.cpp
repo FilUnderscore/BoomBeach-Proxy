@@ -29,10 +29,18 @@ clientsocket::~clientsocket()
 
 void clientsocket::connectTo(string host, int port)
 {
-#ifndef __WIN32__
 	int clientSocketId;
 
 	struct sockaddr_in serv_addr;
+
+#ifdef __WIN32__
+	WSAData wsaData;
+
+	if(WSAStartup(0x101, &wsaData) != 0)
+	{
+			throw std::runtime_error("WSAStartup failed.");
+	}
+#endif
 
 	clientSocketId = socket(AF_INET, SOCK_STREAM, 0);
 	//fcntl(clientSocketId, F_SETFL, O_NONBLOCK);
@@ -64,9 +72,6 @@ void clientsocket::connectTo(string host, int port)
 
 	this->socketId = clientSocketId;
 	this->conn = true;
-#else
-	throw std::runtime_error("Windows support not implemented.");
-#endif
 }
 
 bool clientsocket::connected()
@@ -100,6 +105,8 @@ int clientsocket::readBuffer(unsigned char* array, off_t offset, size_t length)
 	return bytes_read;
 }
 
+#include "../include/proxy/util/bytes.hpp"
+
 int clientsocket::available()
 {
 	int bytesAvailable;
@@ -107,7 +114,11 @@ int clientsocket::available()
 #ifndef __WIN32__
 	ioctl(this->socketId, FIONREAD, &bytesAvailable);
 #else
+	unsigned long bA;
 
+	ioctlsocket(this->socketId, FIONREAD, &bA);
+
+	bytesAvailable = static_cast<int>(bA);
 #endif
 
 	return bytesAvailable;

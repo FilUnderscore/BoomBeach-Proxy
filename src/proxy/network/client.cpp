@@ -67,7 +67,7 @@ void client::runRequest(client instance)
 	{
 		clientAvailable = instance.getSocket().available();
 
-		if(clientAvailable == -1)
+		if(clientAvailable == -2)
 		{
 			//EOF from client.
 			break;
@@ -79,6 +79,7 @@ void client::runRequest(client instance)
 				clientHeaderSet = true;
 
 				instance.getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
+				logger::log(bytes::toHexString(clientPayload));
 				clientPayload.len = messageheader::HEADER_LENGTH;
 
 				clientAvailable -= messageheader::HEADER_LENGTH;
@@ -126,7 +127,7 @@ void client::runResponse(client instance)
 	{
 		serverAvailable = instance.getGameSocket().available();
 
-		if(serverAvailable == -1)
+		if(serverAvailable == -2)
 		{
 			//EOF from server.
 			break;

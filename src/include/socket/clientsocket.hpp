@@ -26,6 +26,7 @@
 #include <arpa/inet.h>
 #else
 //TODO: Implement Winsock2
+#include <Winsock2.h>
 #endif
 
 using namespace std;
