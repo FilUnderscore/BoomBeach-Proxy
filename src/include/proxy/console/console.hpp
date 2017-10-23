@@ -8,6 +8,13 @@
 #ifndef INCLUDE_CONSOLE_HPP_
 #define INCLUDE_CONSOLE_HPP_
 
+#include <vector>
+#include <string>
+
+#include "commands/stopcommand.hpp"
+
+#include "consolecommand.hpp"
+
 #ifndef __WIN32__
 #include <thread>
 #else
@@ -24,6 +31,7 @@ public:
 
 protected:
 	static void init();
+
 #ifdef __WIN32__
 	DWORD consoleThreadId;
 
@@ -33,6 +41,9 @@ protected:
 #else
 	thread* consoleThread;
 #endif
+
+private:
+	static vector<consolecommand*>* commands;
 };
 
 #endif /* INCLUDE_CONSOLE_HPP_ */

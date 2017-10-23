@@ -16,11 +16,32 @@ using namespace std;
 class consolecommand
 {
 public:
-	consolecommand(string command, vector<string> aliases, string helpText);
+	consolecommand(string command, string helpText) : consolecommand(command, new vector<string>, helpText) {}
 
-	~consolecommand();
+	consolecommand(string command, vector<string>* aliases, string helpText)
+	{
+		this->aliases = aliases;
 
-	virtual void execute();
+		this->aliases->insert(this->aliases->begin(), command);
+
+		this->helpText = helpText;
+	}
+
+	~consolecommand()
+	{
+		this->aliases->~vector();
+	}
+
+	void execute();
+
+	vector<string>* getAliases()
+	{
+		return aliases;
+	}
+
+protected:
+	vector<string>* aliases;
+	string helpText;
 };
 
 #endif /* INCLUDE_CONSOLECOMMAND_HPP_ */

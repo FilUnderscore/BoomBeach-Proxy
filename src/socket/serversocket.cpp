@@ -62,7 +62,11 @@ clientsocket serversocket::acceptClient()
 		throw std::runtime_error("Serversocket is not listening!");
 
 	struct sockaddr_in cli_addr;
+#ifdef __WIN32__
 	int clientAddrLen = sizeof(cli_addr);
+#else
+	unsigned int clientAddrLen = sizeof(cli_addr);
+#endif
 
 	int clientSocketId = accept(socketId, (struct sockaddr*) &cli_addr, &clientAddrLen);
 
