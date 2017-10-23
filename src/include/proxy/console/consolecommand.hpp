@@ -26,6 +26,8 @@ public:
 
 	vector<string>* getAliases();
 
+	string getHelpText();
+
 protected:
 	vector<string>* aliases;
 	string helpText;

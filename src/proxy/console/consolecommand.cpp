@@ -36,6 +36,11 @@ vector<string>* consolecommand::getAliases()
 	return aliases;
 }
 
+string consolecommand::getHelpText()
+{
+	return helpText;
+}
+
 void consolecommand::execute(vector<string> args)
 {
 
