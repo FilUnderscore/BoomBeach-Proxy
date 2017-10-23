@@ -32,7 +32,7 @@ public:
 		this->aliases->~vector();
 	}
 
-	void execute();
+	void execute(vector<string> arguments);
 
 	vector<string>* getAliases()
 	{
