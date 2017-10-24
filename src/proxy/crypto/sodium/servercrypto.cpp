@@ -94,6 +94,10 @@ void servercrypto::encryptPacket(message message)
 	}
 	else if(message.getHeader().getId() == messagemap::getId("ServerLoginOk"))
 	{
+		nonce nc;
+
+		nc = *new nonce(clientKey, serverKey, decryptNonce.getBytes());
+
 
 	}
 	else

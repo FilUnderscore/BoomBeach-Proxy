@@ -12,16 +12,18 @@
 #include <string.h>
 #include <cstdlib>
 
+#include "byte.hpp"
+
 struct byte_array
 {
-	unsigned char* buffer;
+	byte* buffer;
 	int len;
 
 	byte_array() : byte_array(0) {}
 
-	byte_array(int array_len) : byte_array((unsigned char*)malloc(array_len), array_len) {}
+	byte_array(int array_len) : byte_array((byte*)malloc(array_len), array_len) {}
 
-	byte_array(unsigned char* buffer, int array_len)
+	byte_array(byte* buffer, int array_len)
 	{
 		this->buffer = buffer;
 		this->len = array_len;

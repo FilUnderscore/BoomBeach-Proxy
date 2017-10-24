@@ -17,7 +17,7 @@ class binstream
 public:
 	binstream(byte_array array);
 
-	unsigned char read();
+	byte read();
 
 	byte_array readArray();
 
