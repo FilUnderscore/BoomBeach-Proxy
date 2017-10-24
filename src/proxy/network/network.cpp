@@ -71,6 +71,7 @@ byte_array network::processMessage(message msg)
 
 	memcpy(message.buffer, header.buffer, messageheader::HEADER_LENGTH);
 	free(header.buffer);
+
 	memcpy(message.buffer + 7, msg.getEncryptedPayload().buffer, msg.getHeader().getPayloadLength());
 
 	return message;

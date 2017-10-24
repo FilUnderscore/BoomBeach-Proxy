@@ -2,7 +2,7 @@
  * boutstream.hpp
  *
  *  Created on: 24/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #ifndef INCLUDE_PROXY_IO_BOUTSTREAM_HPP_

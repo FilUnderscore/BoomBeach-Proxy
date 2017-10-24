@@ -15,8 +15,11 @@ proxy::proxy() {}
 
 proxy::~proxy()
 {
-	proxy::getProxy().con->~console();
-	proxy::getProxy().net->~network();
+	con->~console();
+	net->~network();
+
+	free(con);
+	free(net);
 
 	exit(0);
 }

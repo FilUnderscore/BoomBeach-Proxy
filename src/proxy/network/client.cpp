@@ -82,7 +82,6 @@ void client::runRequest(client instance)
 				clientHeaderSet = true;
 
 				instance.getSocket().readBuffer(clientPayload.buffer, 0, messageheader::HEADER_LENGTH);
-				logger::log(bytes::toHexString(clientPayload));
 				clientPayload.len = messageheader::HEADER_LENGTH;
 
 				clientAvailable -= messageheader::HEADER_LENGTH;
@@ -100,16 +99,21 @@ void client::runRequest(client instance)
 				clientHeaderSet = false;
 
 				instance.getSocket().readBuffer(clientPayload.buffer, 0, clientHeader.getPayloadLength());
+				clientPayload.len = clientHeader.getPayloadLength();
 
 				message msg(clientHeader);
 				msg.setEncryptedPayload(clientPayload);
 
+				logger::log("[CLIENT] Encrypted Payload [HEX]: " + bytes::toHexString(msg.getEncryptedPayload()));
+				logger::log("[CLIENT] Encrypted Payload [TEXT]: " + bytes::toString(msg.getEncryptedPayload()));
+
 				byte_array message = proxy::getProxy().getNetwork()->processMessage(msg);
 
-				logger::log("[CLIENT] Payload [HEX]: " + bytes::toHexString(clientPayload));
 				logger::log("");
 
 				instance.getGameSocket().writeBuffer(message.buffer, 0, message.len);
+
+				free(message.buffer);
 
 				//TODO: Testing
 				//instance.messageHistory.push_back(msg);
@@ -162,16 +166,21 @@ void client::runResponse(client instance)
 				serverHeaderSet = false;
 
 				instance.getGameSocket().readBuffer(serverPayload.buffer, 0, serverHeader.getPayloadLength());
+				serverPayload.len = serverHeader.getPayloadLength();
 
 				message msg(serverHeader);
 				msg.setEncryptedPayload(serverPayload);
 
+				logger::log("[SERVER] Encrypted Payload [HEX]: " + bytes::toHexString(msg.getEncryptedPayload()));
+				logger::log("[SERVER] Encrypted Payload [TEXT]: " + bytes::toString(msg.getEncryptedPayload()));
+
 				byte_array message = proxy::getProxy().getNetwork()->processMessage(msg);
 
-				logger::log("[SERVER] Payload [HEX]: " + bytes::toHexString(serverPayload));
 				logger::log("");
 
 				instance.getSocket().writeBuffer(message.buffer, 0, message.len);
+
+				free(message.buffer);
 
 				//TODO: Testing
 				//instance.messageHistory.push_back(msg);

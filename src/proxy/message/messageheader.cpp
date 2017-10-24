@@ -10,7 +10,11 @@
 #include "../../include/logger/logger.hpp"
 
 messageheader::messageheader()
-{}
+{
+	this->messageId = -1;
+	this->payloadLen = -1;
+	this->messageVersion = -1;
+}
 
 messageheader::messageheader(short messageId, int payloadLen, short messageVersion)
 {

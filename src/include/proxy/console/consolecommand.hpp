@@ -20,7 +20,7 @@ public:
 	consolecommand(string command, string helpText);
 	consolecommand(string command, vector<string>* aliases, string helpText);
 
-	~consolecommand();
+	virtual ~consolecommand();
 
 	virtual void execute(vector<string> arguments);
 

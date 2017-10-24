@@ -2,7 +2,7 @@
  * binstream.hpp
  *
  *  Created on: 22/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #ifndef INCLUDE_PROXY_IO_BINSTREAM_HPP_

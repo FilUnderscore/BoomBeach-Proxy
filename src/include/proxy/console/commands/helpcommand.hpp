@@ -2,7 +2,7 @@
  * helpcommand.hpp
  *
  *  Created on: 24/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #ifndef INCLUDE_PROXY_CONSOLE_COMMANDS_HELPCOMMAND_HPP_
@@ -14,6 +14,7 @@ class helpcommand : public consolecommand
 {
 public:
 	helpcommand() : consolecommand("help", "Displays this message.") {}
+	~helpcommand() {}
 
 	void execute(vector<string> args);
 };

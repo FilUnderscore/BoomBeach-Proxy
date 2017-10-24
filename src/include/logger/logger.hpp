@@ -2,7 +2,7 @@
  * logger.hpp
  *
  *  Created on: 20/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #ifndef INCLUDE_LOGGER_HPP_

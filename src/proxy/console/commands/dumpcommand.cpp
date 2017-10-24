@@ -16,8 +16,6 @@ void dumpcommand::execute(vector<string> args)
 {
 	if(args.size() <= 0)
 	{
-		logger::log("No args");
-
 		vector<client>* clientList = proxy::getProxy().getNetwork()->getClients();
 
 		if(clientList->size() > 0)

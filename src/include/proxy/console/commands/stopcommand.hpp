@@ -2,7 +2,7 @@
  * stopcommand.hpp
  *
  *  Created on: 23/10/2017
- *      Author: filip
+ *      Author: Filip Jerkovic
  */
 
 #ifndef INCLUDE_PROXY_CONSOLE_COMMANDS_STOPCOMMAND_HPP_
@@ -15,6 +15,7 @@ class stopcommand : public consolecommand
 {
 public:
 	stopcommand() : consolecommand("stop", "Stops the Proxy...") {}
+	~stopcommand() {}
 
 	void execute(vector<string> args);
 };
